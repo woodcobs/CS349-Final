@@ -19,7 +19,6 @@ overture
 opaque
 Everglades
 ironic
-zero
 landfill
 implode
 czar
