@@ -52,9 +52,7 @@ egg
 face
 cookie
 cheese
-ice cream cone
 drum
 circle
 spoon
 worm
-spider web

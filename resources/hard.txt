@@ -46,7 +46,6 @@ positive
 champion
 pastry
 tournament
-Chick-fil-A
 rainwater
 random
 lyrics
