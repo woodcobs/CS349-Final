@@ -1,7 +1,7 @@
 package gui;
 
 import javax.swing.*;
-
+ 
 import app.JApplication;
 
 public class EasyHangmanGame extends JApplication {
