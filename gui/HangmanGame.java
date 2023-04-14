@@ -65,13 +65,15 @@ public class HangmanGame extends Visualization {
 		gameWord = "";
 		for (int i = 0; i < word.length(); i++)
 		{
-			tempWord += word.charAt(i);
-			gameWord += "_";
-			if (i < word.length() - 1)
+			if (i % 2 == 0)
 			{
-				tempWord += " ";
-				gameWord += " ";
-			} 
+				tempWord += word.charAt(i);
+				gameWord += "_";
+			} else
+			{
+				tempWord += " " + word.charAt(i);
+				gameWord += " _";
+			}
 		}
 		word = tempWord;
 	}
