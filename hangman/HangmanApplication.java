@@ -4,8 +4,7 @@
 package hangman;
 
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.*;
 import java.awt.Container;
 import java.io.BufferedReader;
@@ -42,7 +41,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	private Container cont;
 	private JPanel titlePanel, gamePanel, informationPanel;
 	private JFrame display;
-	private JLabel title;
+	private JLabel title, wordProgress, usedLetters;
 	private JButton easyButton, mediumButton, hardButton;
 	
 	
@@ -121,7 +120,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		gamePanel.setBorder(BorderFactory.createLineBorder(GAME_COLOR, 2));
 		gamePanel.setBackground(GAME_COLOR);
 		
-		JLabel usedLetters = new JLabel("Used Letters: ");
+		usedLetters = new JLabel("Used Letters: ");
 		usedLetters.setBounds(0, 0, WIDTH, 75);
 		usedLetters.setVerticalAlignment(SwingConstants.CENTER);
 		usedLetters.setHorizontalAlignment(SwingConstants.CENTER);
@@ -130,7 +129,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		usedLetters.setBackground(Color.WHITE);
 		
 		
-		JLabel wordProgress = new JLabel(gameWord);
+		wordProgress = new JLabel(gameWord);
 		wordProgress.setBounds(0, 550, WIDTH, 150);
 		wordProgress.setVerticalAlignment(SwingConstants.CENTER);
 		wordProgress.setHorizontalAlignment(SwingConstants.CENTER);
@@ -138,9 +137,61 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		wordProgress.setOpaque(true);
 		wordProgress.setBackground(Color.LIGHT_GRAY);
 
-		gamePanel.add(usedLetters);
+		
+	    
+	    JTextField tfield = new JTextField(25);
+	    tfield.setHorizontalAlignment(SwingConstants.RIGHT);
+	    tfield.setBackground(new Color(203, 230, 245));
+	    tfield.setBorder(BorderFactory.createLineBorder(new Color(203, 230, 245), 5));
+
+	    // allows for keyboard input
+	    tfield.addKeyListener(new KeyAdapter()
+	    {
+	      public void keyTyped(KeyEvent keyevent)
+	      {
+	        char c = keyevent.getKeyChar();
+
+	        if (c >= 'a' && c <= 'z')
+	        {
+	        	System.out.println(c + " Typed!");
+	        	checkLetter(c);
+	        }
+	        else
+	        {
+	          keyevent.consume();
+	        }
+	      }
+	    });
+	    
+	    gamePanel.add(usedLetters);
 		gamePanel.add(wordProgress);
+		gamePanel.add(tfield);
 	    cont.add(gamePanel);
+	}
+	
+	public void checkLetter(char c)
+	{
+		List<Integer> indices = new ArrayList<Integer>();
+		for (int i = 0; i < word.length(); i++)
+		{
+			if (word.charAt(i) == c)
+			{
+				indices.add(i);
+			}
+		}
+		
+		if (indices.isEmpty())
+		{
+			usedLetters.setText(usedLetters.getText() + " " + c);
+		} else
+		{
+			for (int index : indices)
+			{
+				gameWord = gameWord.substring(0, index) + c
+	              + gameWord.substring(index + 1);
+				wordProgress.setText(gameWord);
+			}
+		}
 	}
 	
 
@@ -162,7 +213,9 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    informationPanel.setBackground(Color.RED);
 		
 	    title = new JLabel("HangBuzz!");
-	    title.setBounds(WIDTH/2 - 60, 30, 100, 50);
+	    title.setBounds(0, 25, WIDTH, 100);
+	    title.setHorizontalAlignment(SwingConstants.CENTER);
+	    title.setFont(new Font("Serif", Font.PLAIN, 25));
 	    titlePanel.add(title);
 	    
 	    easyButton = new JButton(EASY);
