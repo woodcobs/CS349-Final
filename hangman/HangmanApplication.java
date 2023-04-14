@@ -29,6 +29,8 @@ import resources.Marker;
 public class HangmanApplication extends JApplication implements ActionListener {
 
 	private static final Color BACKGROUND_COLOR = new Color(204, 204, 255);
+	private static final Color GAME_COLOR = new Color(155, 155, 250);
+
 	public static final int WIDTH  = 1000;
 	public static final int HEIGHT = 700;
 
@@ -38,7 +40,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	protected static final String HARD = "Hard";
 	  
 	private Container cont;
-	private JPanel titlePanel, informationPanel;
+	private JPanel titlePanel, gamePanel, informationPanel;
 	private JFrame display;
 	private JLabel title;
 	private JButton easyButton, mediumButton, hardButton;
@@ -107,8 +109,28 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		
 		System.out.println(word);
 		System.out.println(gameWord);
+		cont.removeAll();
 	    cont.revalidate();
 	    cont.repaint();
+	    newGame();
+	}
+	
+	public void newGame() {
+		gamePanel = new JPanel();
+		gamePanel.setLayout(null);
+		gamePanel.setBorder(BorderFactory.createLineBorder(GAME_COLOR, 2));
+		gamePanel.setBackground(GAME_COLOR);
+		
+		JLabel wordProgress = new JLabel(gameWord);
+		wordProgress.setBounds(0, 550, WIDTH, 150);
+		wordProgress.setVerticalAlignment(SwingConstants.CENTER);
+		wordProgress.setHorizontalAlignment(SwingConstants.CENTER);
+		wordProgress.setFont(new Font("Serif", Font.PLAIN, 50));
+		wordProgress.setOpaque(true);
+		wordProgress.setBackground(Color.LIGHT_GRAY);
+
+		gamePanel.add(wordProgress);
+	    cont.add(gamePanel);
 	}
 	
 
