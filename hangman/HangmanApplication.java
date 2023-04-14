@@ -40,7 +40,6 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	protected static final String MEDIUM = "Medium";
 	protected static final String HARD = "Hard";
 	  
-	private HangmanGame game;
 	private JLabel title;
 	private JButton easyButton, mediumButton, hardButton;
 	
@@ -110,16 +109,6 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	}
 	
 	
-	 
-	/**
-	* Get the GUI component that will be used to display the game information.
-	* 
-	* @return The JComponent
-	*/
-	 protected JComponent getGUIComponent()
-	 {
-		 return game.getView();
-	 }
 	  
 
 	@Override
