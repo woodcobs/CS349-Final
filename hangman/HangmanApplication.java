@@ -96,7 +96,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	 }
 
 	@Override
-	public void init() {
+	public void init() { 
 		// TODO Auto-generated method stub
 		 // Setup the content pane
 	    JPanel contentPane = (JPanel)getContentPane();
