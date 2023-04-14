@@ -81,8 +81,9 @@ public class HangmanGame extends Visualization {
 	/**
 	 * Reset this WeatherObserver.
 	 */
-	public void reset()
+	public void reset() 
 	{
+		// implement later
 	    clear();
 	}
 
