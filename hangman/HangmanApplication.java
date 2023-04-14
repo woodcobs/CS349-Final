@@ -3,8 +3,11 @@
  */
 package hangman;
 
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.Container;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,15 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import app.JApplication;
-import gui.HangmanGame;
 import io.ResourceFinder;
 import resources.Marker;
 
@@ -31,7 +28,7 @@ import resources.Marker;
  */
 public class HangmanApplication extends JApplication implements ActionListener {
 
-	
+	private static final Color BACKGROUND_COLOR = new Color(204, 204, 255);
 	public static final int WIDTH  = 1000;
 	public static final int HEIGHT = 700;
 
@@ -40,8 +37,12 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	protected static final String MEDIUM = "Medium";
 	protected static final String HARD = "Hard";
 	  
+	private Container cont;
+	private JPanel titlePanel, informationPanel;
+	private JFrame display;
 	private JLabel title;
 	private JButton easyButton, mediumButton, hardButton;
+	
 	
 	protected JTextField letterField;
 	private ResourceFinder jarFinder;
@@ -58,6 +59,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		super(args, WIDTH, HEIGHT);
 	    
 	    jarFinder = ResourceFinder.createInstance(new Marker());
+	    display = new JFrame();
 	}
 
 	/**
@@ -105,42 +107,55 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		
 		System.out.println(word);
 		System.out.println(gameWord);
-
+	    cont.revalidate();
+	    cont.repaint();
 	}
 	
-	
-	  
 
 	@Override
 	public void init() { 
-		// TODO Auto-generated method stub
-		 // Setup the content pane
-	    JPanel contentPane = (JPanel)getContentPane();
-	    contentPane.setLayout(null);
-
+		
+		cont = getContentPane();
+	    cont.setLayout(new BorderLayout(5, 10));
+	    cont.setBackground(BACKGROUND_COLOR);
+	    
+	    titlePanel = new JPanel();
+	    titlePanel.setLayout(null);
+	    titlePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
+	    titlePanel.setBackground(Color.LIGHT_GRAY);
+	    
+	    informationPanel = new JPanel();
+	    informationPanel.setLayout(null);
+	    informationPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
+	    informationPanel.setBackground(Color.RED);
+		
 	    title = new JLabel("HangBuzz!");
 	    title.setBounds(WIDTH/2 - 60, 30, 100, 50);
-	    contentPane.add(title);
+	    titlePanel.add(title);
 	    
 	    easyButton = new JButton(EASY);
 	    easyButton.setBounds(WIDTH/2 - 100, 200, 200, 50);
 	    easyButton.addActionListener(this);
-	    contentPane.add(easyButton);
+	    titlePanel.add(easyButton);
 	    
 	    mediumButton = new JButton(MEDIUM);
 	    mediumButton.setBounds(WIDTH/2 - 100, 300, 200, 50);
 	    mediumButton.addActionListener(this);
-	    contentPane.add(mediumButton);
+	    titlePanel.add(mediumButton);
 	    
 	    hardButton = new JButton(HARD);
 	    hardButton.setBounds(WIDTH/2 - 100, 400, 200, 50);
 	    hardButton.addActionListener(this);
-	    contentPane.add(hardButton);
+	    titlePanel.add(hardButton);
 	    
 	    
 	    //JComponent hangmanComponent = getGUIComponent();
 	    //hangmanComponent.setBounds(0, 0, WIDTH, HEIGHT);
-	    //contentPane.add(hangmanComponent);
+	    cont.add(titlePanel);
+	    
+	    
+
+	    
 	}
 	
 	public void getWord()
