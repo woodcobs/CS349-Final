@@ -5,6 +5,13 @@ package hangman;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -36,6 +43,12 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	private HangmanGame game;
 	private JLabel title;
 	private JButton easyButton, mediumButton, hardButton;
+	
+	protected JTextField letterField;
+	private ResourceFinder jarFinder;
+	private String word;
+	private String gameWord;
+	private List<String> words;
 
 	/**
 	 * @param args
@@ -45,7 +58,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	public HangmanApplication(String[] args) {
 		super(args, WIDTH, HEIGHT);
 	    
-	    ResourceFinder rf = ResourceFinder.createInstance(new Marker());
+	    jarFinder = ResourceFinder.createInstance(new Marker());
 	}
 
 	/**
@@ -60,9 +73,9 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		// TODO Auto-generated method stub
 		String ac = evt.getActionCommand();
 	    
-	    if (ac.equalsIgnoreCase(EASY)) handleGame(EASY);
-	    else if (ac.equalsIgnoreCase(MEDIUM)) handleGame(MEDIUM);
-	    else if (ac.equalsIgnoreCase(HARD)) handleGame(HARD);
+	    if (ac.equalsIgnoreCase(EASY)) handleGame("easy");
+	    else if (ac.equalsIgnoreCase(MEDIUM)) handleGame("medium");
+	    else if (ac.equalsIgnoreCase(HARD)) handleGame("hard");
 	}
 	
 	/**
@@ -70,30 +83,44 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	*/
 	protected void handleGame(final String difficulty)
 	{
-	    game = new HangmanGame(WIDTH, HEIGHT, difficulty);
+		String filename = difficulty + ".txt";
+		InputStream is = jarFinder.findInputStream(filename);
+		BufferedReader in = new BufferedReader(new InputStreamReader(is));
+		
+		
+		
+		// Read the words of the difficulty
+		words = new ArrayList<String>();
+		String currWord = "";
+		try
+		{
+			while ((currWord = in.readLine()) != null)
+			{
+				words.add(currWord);
+			}
+		} catch (IOException ioe)
+		{
+			words.add("error");
+		}
+		getWord();
+		
+		System.out.println(word);
+		System.out.println(gameWord);
+
 	}
 	
 	
 	 
 	/**
-	* Get the GUI component that will be used to display the weather information.
+	* Get the GUI component that will be used to display the game information.
 	* 
-	* @return The WeatherObserverPanel
+	* @return The JComponent
 	*/
 	 protected JComponent getGUIComponent()
 	 {
 		 return game.getView();
 	 }
 	  
-	 /**
-	 * Get the WeatherObserver to inform of changes.
-	 * 
-	 * @return The WeatherObserverPanel
-	 */
-	 protected HangmanGame getWeatherObserver()
-	 {
-		 return game;
-	 }
 
 	@Override
 	public void init() { 
@@ -122,10 +149,34 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    contentPane.add(hardButton);
 	    
 	    
-	    JComponent hangmanComponent = getGUIComponent();
-	    hangmanComponent.setBounds(0, 0, WIDTH, HEIGHT);
-	    contentPane.add(hangmanComponent);
+	    //JComponent hangmanComponent = getGUIComponent();
+	    //hangmanComponent.setBounds(0, 0, WIDTH, HEIGHT);
+	    //contentPane.add(hangmanComponent);
 	}
+	
+	public void getWord()
+	{
+		Random rand = new Random();
+		int rand_int = rand.nextInt(60);
+		word = words.get(rand_int);
+		String tempWord = "";
+		// Add spaces
+		
+		gameWord = "";
+		for (int i = 0; i < word.length(); i++)
+		{
+			tempWord += word.charAt(i);
+			gameWord += "_";
+			
+			if (i < word.length())
+			{
+				tempWord += " ";
+				gameWord += " ";
+			}			
+		}
+		word = tempWord;
+	}
+	
 
 	  /**
 	  * Construct and invoke  (in the event dispatch thread) 
