@@ -121,6 +121,15 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		gamePanel.setBorder(BorderFactory.createLineBorder(GAME_COLOR, 2));
 		gamePanel.setBackground(GAME_COLOR);
 		
+		JLabel usedLetters = new JLabel("Used Letters: ");
+		usedLetters.setBounds(0, 0, WIDTH, 75);
+		usedLetters.setVerticalAlignment(SwingConstants.CENTER);
+		usedLetters.setHorizontalAlignment(SwingConstants.CENTER);
+		usedLetters.setFont(new Font("Serif", Font.PLAIN, 25));
+		usedLetters.setOpaque(true);
+		usedLetters.setBackground(Color.WHITE);
+		
+		
 		JLabel wordProgress = new JLabel(gameWord);
 		wordProgress.setBounds(0, 550, WIDTH, 150);
 		wordProgress.setVerticalAlignment(SwingConstants.CENTER);
@@ -129,6 +138,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		wordProgress.setOpaque(true);
 		wordProgress.setBackground(Color.LIGHT_GRAY);
 
+		gamePanel.add(usedLetters);
 		gamePanel.add(wordProgress);
 	    cont.add(gamePanel);
 	}
