@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import app.JApplication;
+import gui.HangmanGame;
 import io.ResourceFinder;
 import resources.Marker;
 
@@ -32,16 +33,9 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	protected static final String MEDIUM = "Medium";
 	protected static final String HARD = "Hard";
 	  
+	private HangmanGame game;
 	private JLabel title;
 	private JButton easyButton, mediumButton, hardButton;
-	/**
-	 * @param width
-	 * @param height
-	 */
-	public HangmanApplication(int width, int height) {
-		super(width, height);
-		// TODO Auto-generated constructor stub
-	}
 
 	/**
 	 * @param args
@@ -76,17 +70,30 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	*/
 	protected void handleGame(final String difficulty)
 	{
-		//JOptionPane.showMessageDialog(getGUIComponent(), 
-		//difficulty, difficulty, JOptionPane.INFORMATION_MESSAGE);
+	    game = new HangmanGame(WIDTH, HEIGHT, difficulty);
 	}
 	
+	
+	 
 	/**
-	* Get the GUI components to use to display the weather information.
+	* Get the GUI component that will be used to display the weather information.
 	* 
 	* @return The WeatherObserverPanel
 	*/
-	//protected abstract JComponent getGUIComponent();
-	 
+	 protected JComponent getGUIComponent()
+	 {
+		 return game.getView();
+	 }
+	  
+	 /**
+	 * Get the WeatherObserver to inform of changes.
+	 * 
+	 * @return The WeatherObserverPanel
+	 */
+	 protected HangmanGame getWeatherObserver()
+	 {
+		 return game;
+	 }
 
 	@Override
 	public void init() {
@@ -115,9 +122,9 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    contentPane.add(hardButton);
 	    
 	    
-	    //JComponent weatherObserverComponent = getGUIComponent();
-	    //weatherObserverComponent.setBounds(0, 60, WIDTH, HEIGHT-60);
-	    //contentPane.add(weatherObserverComponent);
+	    JComponent hangmanComponent = getGUIComponent();
+	    hangmanComponent.setBounds(0, 0, WIDTH, HEIGHT);
+	    contentPane.add(hangmanComponent);
 	}
 
 	  /**
