@@ -5,26 +5,22 @@ package hangman;
 
 
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.awt.Container;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.awt.image.BufferedImage;
+import java.io.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.*;
+import javax.imageio.ImageIO;
 
 import app.JApplication;
 import io.ResourceFinder;
 import resources.Marker;
-import visual.statik.sampled.Content;
-import visual.statik.sampled.ContentFactory;
 
 /**
  * @author Bradley Woodcock, Thomas Mandel, Hunter Bowles
@@ -43,19 +39,24 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	protected static final String MEDIUM = "Medium";
 	protected static final String HARD = "Hard";
 	  
+	
+	
+	
+	protected JTextField letterField;
+	
+	private int lives = 5;
+
 	private Container cont;
 	private JPanel titlePanel, gamePanel, informationPanel;
 	private JFrame display;
 	private JLabel title, wordProgress, usedLetters;
 	private JButton easyButton, mediumButton, hardButton;
-	
-	
-	protected JTextField letterField;
 	private ResourceFinder jarFinder;
 	private String word;
 	private String gameWord;
 	private List<String> words;
 	private List<Character> guessedLetters = new ArrayList<Character>();
+	private String currDifficulty;
 
 	/**
 	 * @param args
@@ -91,6 +92,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	*/
 	protected void handleGame(final String difficulty)
 	{
+		currDifficulty = difficulty;
 		String filename = difficulty + ".txt";
 		InputStream is = jarFinder.findInputStream(filename);
 		BufferedReader in = new BufferedReader(new InputStreamReader(is));
@@ -157,11 +159,40 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	      {
 	        char c = keyevent.getKeyChar();
 
+	        if (lives == 0)
+	        {
+	        	System.out.println("out of lives");
+	        	tfield.removeKeyListener(this);
+	        	
+	        	Object[] options = {"Menu", "Play Again"};
+
+	        	
+	        	int n = JOptionPane.showOptionDialog(cont, "The word was: " + word.replace(" ", ""), "Game Over!",
+	        			JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+	        			null, options, null);
+	        	
+	        	if (n == 1) 
+	        	{
+	        		// Play Again
+	        	    handleGame(currDifficulty);
+	        	} else
+	        	{
+	        		// Back to Menu
+	        		cont.removeAll();
+	        	    cont.revalidate();
+	        	    cont.repaint();
+	        		mainMenu();
+	        	}
+	        	
+	        	return;
+	        }
+	        
 	        if (c >= 'a' && c <= 'z' && !guessedLetters.contains(c))
 	        {
 	        	System.out.println(c + " Typed!");
 	        	checkLetter(c);
 	        	guessedLetters.add(c);
+	        	System.out.println("Lives Remaining: " + lives);
 	        }
 	        else
 	        {
@@ -191,10 +222,14 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		}
 	    
 	    
+	    
 	    gamePanel.add(usedLetters);
 		gamePanel.add(wordProgress);
 		gamePanel.add(tfield);
 	    cont.add(gamePanel);
+	    
+	    lives = 5;
+	    
 	}
 	
 	public void checkLetter(char c)
@@ -211,6 +246,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		if (indices.isEmpty())
 		{
 			usedLetters.setText(usedLetters.getText() + " " + c);
+			lives--;
 		} else
 		{
 			for (int index : indices)
@@ -222,15 +258,10 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		}
 	}
 	
-
-	@Override
-	public void init() { 
-		
-		cont = getContentPane();
-	    cont.setLayout(new BorderLayout(5, 10));
-	    cont.setBackground(BACKGROUND_COLOR);
-	    
-	    titlePanel = new JPanel();
+	
+	public void mainMenu()
+	{
+		titlePanel = new JPanel();
 	    titlePanel.setLayout(null);
 	    titlePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
 	    titlePanel.setBackground(Color.LIGHT_GRAY);
@@ -265,10 +296,15 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    //JComponent hangmanComponent = getGUIComponent();
 	    //hangmanComponent.setBounds(0, 0, WIDTH, HEIGHT);
 	    cont.add(titlePanel);
-	    
-	    
+	}
 
-	    
+	@Override
+	public void init() { 
+		
+		cont = getContentPane();
+	    cont.setLayout(new BorderLayout(5, 10));
+	    cont.setBackground(BACKGROUND_COLOR);
+	    mainMenu();
 	}
 	
 	public void getWord()
