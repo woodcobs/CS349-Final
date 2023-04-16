@@ -50,6 +50,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	private String word;
 	private String gameWord;
 	private List<String> words;
+	private List<Character> guessedLetters = new ArrayList<Character>();
 
 	/**
 	 * @param args
@@ -136,14 +137,14 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		wordProgress.setFont(new Font("Serif", Font.PLAIN, 50));
 		wordProgress.setOpaque(true);
 		wordProgress.setBackground(Color.LIGHT_GRAY);
-
 		
-	    
 	    JTextField tfield = new JTextField(25);
 	    tfield.setHorizontalAlignment(SwingConstants.RIGHT);
 	    tfield.setBackground(new Color(203, 230, 245));
 	    tfield.setBorder(BorderFactory.createLineBorder(new Color(203, 230, 245), 5));
+	    guessedLetters.clear();
 
+	    
 	    // allows for keyboard input
 	    tfield.addKeyListener(new KeyAdapter()
 	    {
@@ -151,10 +152,11 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	      {
 	        char c = keyevent.getKeyChar();
 
-	        if (c >= 'a' && c <= 'z')
+	        if (c >= 'a' && c <= 'z' && !guessedLetters.contains(c))
 	        {
 	        	System.out.println(c + " Typed!");
 	        	checkLetter(c);
+	        	guessedLetters.add(c);
 	        }
 	        else
 	        {
@@ -162,6 +164,8 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	        }
 	      }
 	    });
+	    
+	    
 	    
 	    gamePanel.add(usedLetters);
 		gamePanel.add(wordProgress);
