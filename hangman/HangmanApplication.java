@@ -5,9 +5,11 @@ package hangman;
 
 
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.awt.Container;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,11 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import app.JApplication;
 import io.ResourceFinder;
 import resources.Marker;
+import visual.statik.sampled.Content;
+import visual.statik.sampled.ContentFactory;
 
 /**
  * @author Bradley Woodcock, Thomas Mandel, Hunter Bowles
@@ -165,6 +170,25 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	      }
 	    });
 	    
+	    BufferedImage guyPicture;
+	    BufferedImage standPicture;
+	    JLabel guyLabel = null;
+	    JLabel standLabel = null;
+		try {
+			guyPicture = ImageIO.read(new File("./resources/hangman_character.png"));
+			standPicture = ImageIO.read(new File("./resources/hangman_stand.png"));
+			ImageIcon guy = new ImageIcon(guyPicture);
+			ImageIcon stand = new ImageIcon(standPicture);
+			guyLabel = new JLabel(guy);
+			standLabel = new JLabel(stand);
+			guyLabel.setBounds(WIDTH / 2 - 25, HEIGHT / 2 - 250, 150, 500);
+			standLabel.setBounds(WIDTH / 2 + 25, HEIGHT / 2 - 305, 300, 600);
+			gamePanel.add(guyLabel);
+			gamePanel.add(standLabel);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    
 	    
 	    gamePanel.add(usedLetters);
