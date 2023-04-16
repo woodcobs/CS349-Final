@@ -207,7 +207,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    JLabel standLabel = null;
 		try {
 			guyPicture = ImageIO.read(new File("./resources/hangman_character.png"));
-			standPicture = ImageIO.read(new File("./resources/hangman_stand.png"));
+			standPicture = ImageIO.read(new File("./resources/hangman_stand0.png"));
 			ImageIcon guy = new ImageIcon(guyPicture);
 			ImageIcon stand = new ImageIcon(standPicture);
 			guyLabel = new JLabel(guy);
