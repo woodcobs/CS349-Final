@@ -171,7 +171,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 				try {
 					standPicture = ImageIO.read(new File("./resources/hangman_stand4.png"));
 					standLabel = new JLabel(new ImageIcon(standPicture));
-					standLabel.setBounds(WIDTH / 2 + 25, HEIGHT / 2 - 305, 300, 600);
+					standLabel.setBounds(WIDTH / 2 - 35, HEIGHT / 2 - 305, 300, 600);
 					gamePanel.add(standLabel);
 					gamePanel.revalidate();
 					gamePanel.repaint();
@@ -256,8 +256,8 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			ImageIcon stand = new ImageIcon(standPicture);
 			guyLabel = new JLabel(guy);
 			standLabel = new JLabel(stand);
-			guyLabel.setBounds(WIDTH / 2 - 25, HEIGHT / 2 - 250, 150, 500);
-			standLabel.setBounds(WIDTH / 2 + 25, HEIGHT / 2 - 305, 300, 600);
+			guyLabel.setBounds(WIDTH / 2 - 75, HEIGHT / 2 - 250, 150, 500);
+			standLabel.setBounds(WIDTH / 2 - 35, HEIGHT / 2 - 305, 300, 600);
 			gamePanel.add(guyLabel);
 			//gamePanel.add(standLabel);
 		} catch (IOException e) {
@@ -301,7 +301,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			try {
 				standPicture = ImageIO.read(new File("./resources/hangman_stand" + currStand + ".png"));
 				standLabel = new JLabel(new ImageIcon(standPicture));
-				standLabel.setBounds(WIDTH / 2 + 25, HEIGHT / 2 - 305, 300, 600);
+				standLabel.setBounds(WIDTH / 2 - 35, HEIGHT / 2 - 305, 300, 600);
 				gamePanel.add(standLabel);
 				gamePanel.revalidate();
 				gamePanel.repaint();
@@ -335,24 +335,27 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    informationPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
 	    informationPanel.setBackground(Color.RED);
 		
-	    title = new JLabel("HangBuzz!");
+	    title = new JLabel("Hangman!");
 	    title.setBounds(0, 25, WIDTH, 100);
 	    title.setHorizontalAlignment(SwingConstants.CENTER);
-	    title.setFont(new Font("Serif", Font.PLAIN, 25));
+	    title.setFont(new Font("Serif", Font.PLAIN, 50));
 	    titlePanel.add(title);
 	    
 	    easyButton = new JButton(EASY);
 	    easyButton.setBounds(WIDTH/2 - 100, 200, 200, 50);
+	    easyButton.setFont(new Font("Serif", Font.PLAIN, 20));
 	    easyButton.addActionListener(this);
 	    titlePanel.add(easyButton);
 	    
 	    mediumButton = new JButton(MEDIUM);
 	    mediumButton.setBounds(WIDTH/2 - 100, 300, 200, 50);
+	    mediumButton.setFont(new Font("Serif", Font.PLAIN, 20));
 	    mediumButton.addActionListener(this);
 	    titlePanel.add(mediumButton);
 	    
 	    hardButton = new JButton(HARD);
 	    hardButton.setBounds(WIDTH/2 - 100, 400, 200, 50);
+	    hardButton.setFont(new Font("Serif", Font.PLAIN, 20));
 	    hardButton.addActionListener(this);
 	    titlePanel.add(hardButton);
 	    
