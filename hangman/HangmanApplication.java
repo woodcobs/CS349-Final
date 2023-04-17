@@ -44,9 +44,10 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	
 	protected JTextField letterField;
 	
-	private int lives = 5;
+	private int lives = 4;
 
 	private Container cont;
+    private JLabel standLabel;
 	private JPanel titlePanel, gamePanel, informationPanel;
 	private JFrame display;
 	private JLabel title, wordProgress, usedLetters;
@@ -159,10 +160,25 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	      {
 	        char c = keyevent.getKeyChar();
 
-	        if (lives == 0)
+	        if (lives == 1)
 	        {
 	        	System.out.println("out of lives");
 	        	tfield.removeKeyListener(this);
+
+	        	gamePanel.remove(standLabel);
+	    	    BufferedImage standPicture;
+
+				try {
+					standPicture = ImageIO.read(new File("./resources/hangman_stand4.png"));
+					standLabel = new JLabel(new ImageIcon(standPicture));
+					standLabel.setBounds(WIDTH / 2 + 25, HEIGHT / 2 - 305, 300, 600);
+					gamePanel.add(standLabel);
+					gamePanel.revalidate();
+					gamePanel.repaint();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	        	
 	        	Object[] options = {"Menu", "Play Again"};
 
@@ -192,6 +208,35 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	        	System.out.println(c + " Typed!");
 	        	checkLetter(c);
 	        	guessedLetters.add(c);
+	        	
+	        	System.out.println(word + "-" + gameWord);
+	        	if (word.equals(gameWord))
+	        	{
+	        		System.out.println("YOU WIN");
+		        	tfield.removeKeyListener(this);
+		        	
+		        	Object[] options = {"Menu", "Play Again"};
+
+		        	
+		        	int n = JOptionPane.showOptionDialog(cont, "NICE WORK", "YOU WIN!",
+		        			JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+		        			null, options, null);
+		        	
+		        	if (n == 1) 
+		        	{
+		        		// Play Again
+		        	    handleGame(currDifficulty);
+		        	} else
+		        	{
+		        		// Back to Menu
+		        		cont.removeAll();
+		        	    cont.revalidate();
+		        	    cont.repaint();
+		        		mainMenu();
+		        	}
+		        	
+		        	return;
+	        	}
 	        	System.out.println("Lives Remaining: " + lives);
 	        }
 	        else
@@ -204,7 +249,6 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    BufferedImage guyPicture;
 	    BufferedImage standPicture;
 	    JLabel guyLabel = null;
-	    JLabel standLabel = null;
 		try {
 			guyPicture = ImageIO.read(new File("./resources/hangman_character.png"));
 			standPicture = ImageIO.read(new File("./resources/hangman_stand0.png"));
@@ -215,7 +259,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			guyLabel.setBounds(WIDTH / 2 - 25, HEIGHT / 2 - 250, 150, 500);
 			standLabel.setBounds(WIDTH / 2 + 25, HEIGHT / 2 - 305, 300, 600);
 			gamePanel.add(guyLabel);
-			gamePanel.add(standLabel);
+			//gamePanel.add(standLabel);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -228,7 +272,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		gamePanel.add(tfield);
 	    cont.add(gamePanel);
 	    
-	    lives = 5;
+	    lives = 4;
 	    
 	}
 	
@@ -247,6 +291,26 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		{
 			usedLetters.setText(usedLetters.getText() + " " + c);
 			lives--;
+		    BufferedImage standPicture;
+		    
+		    int currStand = 3 - lives;
+		    if (currStand == 0)
+		    {
+			    gamePanel.remove(standLabel);
+		    }
+			try {
+				standPicture = ImageIO.read(new File("./resources/hangman_stand" + currStand + ".png"));
+				standLabel = new JLabel(new ImageIcon(standPicture));
+				standLabel.setBounds(WIDTH / 2 + 25, HEIGHT / 2 - 305, 300, 600);
+				gamePanel.add(standLabel);
+				gamePanel.revalidate();
+				gamePanel.repaint();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 		} else
 		{
 			for (int index : indices)
