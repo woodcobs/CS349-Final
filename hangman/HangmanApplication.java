@@ -17,6 +17,11 @@ import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import app.JApplication;
 import io.ResourceFinder;
@@ -58,6 +63,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	private List<String> words;
 	private List<Character> guessedLetters = new ArrayList<Character>();
 	private String currDifficulty;
+	private Clip correctSound, incorrectSound;
 
 	/**
 	 * @param args
@@ -151,7 +157,29 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    tfield.setBackground(new Color(203, 230, 245));
 	    tfield.setBorder(BorderFactory.createLineBorder(new Color(203, 230, 245), 5));
 	    guessedLetters.clear();
-
+	    
+	    
+	    // Sampled Sound Area
+	    jarFinder = ResourceFinder.createInstance(new resources.Marker());
+	    InputStream is = jarFinder.findInputStream("");
+	    BufferedInputStream bis = new BufferedInputStream(is);
+	    AudioInputStream ais;
+	    try {
+			ais = AudioSystem.getAudioInputStream(bis);
+		} catch (UnsupportedAudioFileException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    
+	    try {
+			correctSound = AudioSystem.getClip();
+		} catch (LineUnavailableException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	    
 	    // allows for keyboard input
 	    tfield.addKeyListener(new KeyAdapter()
