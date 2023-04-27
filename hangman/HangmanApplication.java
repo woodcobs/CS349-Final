@@ -64,6 +64,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	private List<Character> guessedLetters = new ArrayList<Character>();
 	private String currDifficulty;
 	private Clip correctSound, incorrectSound;
+	AudioInputStream aisWin, aisLose;
 
 	/**
 	 * @param args
@@ -160,12 +161,14 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    
 	    
 	    // Sampled Sound Area
-	    jarFinder = ResourceFinder.createInstance(new resources.Marker());
-	    InputStream is = jarFinder.findInputStream("");
-	    BufferedInputStream bis = new BufferedInputStream(is);
-	    AudioInputStream ais;
+	    InputStream winSound = jarFinder.findInputStream("mixkit-correct-answer-notification-947.wav");
+	    InputStream loseSound = jarFinder.findInputStream("mixkit-player-losing-or-failing-2042.wav");
+	    BufferedInputStream bis1 = new BufferedInputStream(winSound);
+	    BufferedInputStream bis2 = new BufferedInputStream(loseSound);
+	    
 	    try {
-			ais = AudioSystem.getAudioInputStream(bis);
+	    	aisWin = AudioSystem.getAudioInputStream(bis1);
+			aisLose = AudioSystem.getAudioInputStream(bis2);
 		} catch (UnsupportedAudioFileException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -176,9 +179,16 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    
 	    try {
 			correctSound = AudioSystem.getClip();
+			incorrectSound = AudioSystem.getClip();
+			correctSound.open(aisWin);
+			incorrectSound.open(aisLose);
+			
 		} catch (LineUnavailableException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	    
 	    // allows for keyboard input
@@ -346,6 +356,9 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		
 		if (indices.isEmpty())
 		{
+			incorrectSound.setFramePosition(0);
+			incorrectSound.start();
+			
 			usedLetters.setText(usedLetters.getText() + " " + c);
 			lives--;
 		    BufferedImage guyPicture;
@@ -408,6 +421,9 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			
 		} else
 		{
+			correctSound.setFramePosition(0);
+			correctSound.start();
+			
 			for (int index : indices)
 			{
 				gameWord = gameWord.substring(0, index) + c
