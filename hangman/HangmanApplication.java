@@ -420,10 +420,14 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	
 	public void mainMenu()
 	{
+		
+		
+			
 		titlePanel = new JPanel();
 	    titlePanel.setLayout(null);
 	    titlePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
 	    titlePanel.setBackground(Color.LIGHT_GRAY);
+	    
 	    
 	    informationPanel = new JPanel();
 	    informationPanel.setLayout(null);
@@ -457,6 +461,17 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    
 	    //JComponent hangmanComponent = getGUIComponent();
 	    //hangmanComponent.setBounds(0, 0, WIDTH, HEIGHT);
+	    BufferedImage background;
+		try {
+			background = ImageIO.read(new File("./resources/sceneBlur.png"));
+			ImageIcon bg = new ImageIcon(background);
+			bgLabel = new JLabel(bg);
+			bgLabel.setBounds(0,0, WIDTH, HEIGHT);
+			titlePanel.add(bgLabel, -1);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    cont.add(titlePanel);
 	}
 
