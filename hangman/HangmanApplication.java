@@ -63,8 +63,8 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	private List<String> words;
 	private List<Character> guessedLetters = new ArrayList<Character>();
 	private String currDifficulty;
-	private Clip correctSound, incorrectSound;
-	AudioInputStream aisWin, aisLose;
+	private Clip correctSound, incorrectSound, backgroundSound;
+	private AudioInputStream aisWin, aisLose, aisBackground;
 
 	/**
 	 * @param args
@@ -161,14 +161,17 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    
 	    
 	    // Sampled Sound Area
-	    InputStream winSound = jarFinder.findInputStream("mixkit-correct-answer-notification-947.wav");
-	    InputStream loseSound = jarFinder.findInputStream("mixkit-player-losing-or-failing-2042.wav");
+	    InputStream winSound = jarFinder.findInputStream("mixkit-football-team-applause-509.wav");
+	    InputStream loseSound = jarFinder.findInputStream("boo.wav");
+	    InputStream background = jarFinder.findInputStream("Monkeys-Spinning-Monkeys.wav");
 	    BufferedInputStream bis1 = new BufferedInputStream(winSound);
 	    BufferedInputStream bis2 = new BufferedInputStream(loseSound);
+	    BufferedInputStream bis3 = new BufferedInputStream(background);
 	    
 	    try {
 	    	aisWin = AudioSystem.getAudioInputStream(bis1);
 			aisLose = AudioSystem.getAudioInputStream(bis2);
+			aisBackground = AudioSystem.getAudioInputStream(bis3);
 		} catch (UnsupportedAudioFileException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -180,8 +183,10 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    try {
 			correctSound = AudioSystem.getClip();
 			incorrectSound = AudioSystem.getClip();
+			backgroundSound = AudioSystem.getClip();
 			correctSound.open(aisWin);
 			incorrectSound.open(aisLose);
+			backgroundSound.open(aisBackground);
 			
 		} catch (LineUnavailableException e1) {
 			// TODO Auto-generated catch block
@@ -190,6 +195,9 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	    
+	    backgroundSound.setFramePosition(0);
+	    backgroundSound.start();
 	    
 	    // allows for keyboard input
 	    tfield.addKeyListener(new KeyAdapter()
@@ -232,6 +240,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	        	if (n == 1) 
 	        	{
 	        		// Play Again
+	        		backgroundSound.stop();
 	        	    handleGame(currDifficulty);
 	        	} else
 	        	{
@@ -239,6 +248,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	        		cont.removeAll();
 	        	    cont.revalidate();
 	        	    cont.repaint();
+	        	    backgroundSound.stop();
 	        		mainMenu();
 	        	}
 	        	
@@ -267,10 +277,12 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		        	if (n == 1) 
 		        	{
 		        		// Play Again
+		        		backgroundSound.stop();
 		        	    handleGame(currDifficulty);
 		        	} else
 		        	{
 		        		// Back to Menu
+		        		backgroundSound.stop();
 		        		cont.removeAll();
 		        	    cont.revalidate();
 		        	    cont.repaint();
