@@ -162,7 +162,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    
 	    // Sampled Sound Area
 	    InputStream winSound = jarFinder.findInputStream("mixkit-football-team-applause-509.wav");
-	    InputStream loseSound = jarFinder.findInputStream("boo.wav");
+	    InputStream loseSound = jarFinder.findInputStream("mixkit-wood-hard-hit-2182.wav");
 	    InputStream background = jarFinder.findInputStream("Monkeys-Spinning-Monkeys.wav");
 	    BufferedInputStream bis1 = new BufferedInputStream(winSound);
 	    BufferedInputStream bis2 = new BufferedInputStream(loseSound);
@@ -300,9 +300,9 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	      }
 	    });
 	    
-	    BufferedImage background, guyPicture, executionerIdle, executionerSwing, wordBoxImage, wordBubbleImage;
+	    BufferedImage background1, guyPicture, executionerIdle, executionerSwing, wordBoxImage, wordBubbleImage;
 		try {
-			background = ImageIO.read(new File("./resources/scene.png"));
+			background1 = ImageIO.read(new File("./resources/scene.png"));
 			guyPicture = ImageIO.read(new File("./resources/stickman_0.png"));
 			wordBubbleImage = ImageIO.read(new File("./resources/wordBubble.png"));
 			executionerIdle = ImageIO.read(new File("./resources/executioner_idle.png"));
@@ -310,7 +310,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			wordBoxImage = ImageIO.read(new File("./resources/wordBox.png"));
 			
 			
-			ImageIcon bg = new ImageIcon(background);
+			ImageIcon bg = new ImageIcon(background1);
 			ImageIcon guy = new ImageIcon(guyPicture);
 			ImageIcon exeIdle = new ImageIcon(executionerIdle);
 			ImageIcon exeSwing = new ImageIcon(executionerSwing);
