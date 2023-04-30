@@ -36,8 +36,8 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	private static final Color BACKGROUND_COLOR = new Color(204, 204, 255);
 	private static final Color GAME_COLOR = new Color(155, 155, 250);
 
-	public static final int WIDTH  = 1000;
-	public static final int HEIGHT = 700;
+	public static final int WIDTH  = 1366;
+	public static final int HEIGHT = 768;
 
 	
 	protected static final String EASY = "Easy";
@@ -49,10 +49,10 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	
 	protected JTextField letterField;
 	
-	private int lives = 4;
+	private int lives = 6;
 
 	private Container cont;
-    private JLabel standLabel;
+    private JLabel bgLabel, guyLabel, exeIdleLabel, exeSwingLabel,  wordBoxLabel, wordBubbleLabel;
 	private JPanel titlePanel, gamePanel, informationPanel;
 	private JFrame display;
 	private JLabel title, wordProgress, usedLetters;
@@ -135,21 +135,21 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		gamePanel.setBorder(BorderFactory.createLineBorder(GAME_COLOR, 2));
 		gamePanel.setBackground(GAME_COLOR);
 		
-		usedLetters = new JLabel("Used Letters: ");
-		usedLetters.setBounds(0, 0, WIDTH, 75);
+		usedLetters = new JLabel("");
+		usedLetters.setBounds(WIDTH/2 + 50, HEIGHT/2 - 100, 500, 75);
 		usedLetters.setVerticalAlignment(SwingConstants.CENTER);
 		usedLetters.setHorizontalAlignment(SwingConstants.CENTER);
-		usedLetters.setFont(new Font("Serif", Font.PLAIN, 25));
-		usedLetters.setOpaque(true);
+		usedLetters.setFont(new Font("Serif", Font.PLAIN, 50));
+		usedLetters.setOpaque(false);
 		usedLetters.setBackground(Color.WHITE);
 		
 		
 		wordProgress = new JLabel(gameWord);
-		wordProgress.setBounds(0, 550, WIDTH, 150);
+		wordProgress.setBounds(0, 35, 1150, 150);
 		wordProgress.setVerticalAlignment(SwingConstants.CENTER);
 		wordProgress.setHorizontalAlignment(SwingConstants.CENTER);
-		wordProgress.setFont(new Font("Serif", Font.PLAIN, 50));
-		wordProgress.setOpaque(true);
+		wordProgress.setFont(new Font("Serif", Font.PLAIN, 40));
+		wordProgress.setOpaque(false);
 		wordProgress.setBackground(Color.LIGHT_GRAY);
 		
 	    JTextField tfield = new JTextField(25);
@@ -193,14 +193,18 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	        	System.out.println("out of lives");
 	        	tfield.removeKeyListener(this);
 
-	        	gamePanel.remove(standLabel);
-	    	    BufferedImage standPicture;
+	        	gamePanel.remove(guyLabel);
+	        	gamePanel.remove(wordBubbleLabel);
+			    gamePanel.remove(wordProgress);
+	    	    BufferedImage guyPicture;
 
 				try {
-					standPicture = ImageIO.read(new File("./resources/hangman_stand4.png"));
-					standLabel = new JLabel(new ImageIcon(standPicture));
-					standLabel.setBounds(WIDTH / 2 - 35, HEIGHT / 2 - 305, 300, 600);
-					gamePanel.add(standLabel);
+					guyPicture = ImageIO.read(new File("./resources/stickman_6.png"));
+					guyLabel = new JLabel(new ImageIcon(guyPicture));
+					guyLabel.setBounds(WIDTH / 2 - 360, HEIGHT / 2 - 125, 300, 300);
+					gamePanel.add(guyLabel, 0);
+					gamePanel.add(wordBubbleLabel, 0);
+					gamePanel.add(wordProgress, 0);
 					gamePanel.revalidate();
 					gamePanel.repaint();
 				} catch (IOException e) {
@@ -237,7 +241,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	        	checkLetter(c);
 	        	guessedLetters.add(c);
 	        	
-	        	System.out.println(word + "-" + gameWord);
+	        	System.out.println(word);
 	        	if (word.equals(gameWord))
 	        	{
 	        		System.out.println("YOU WIN");
@@ -274,20 +278,46 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	      }
 	    });
 	    
-	    BufferedImage guyPicture;
-	    BufferedImage standPicture;
-	    JLabel guyLabel = null;
+	    BufferedImage background, guyPicture, executionerIdle, executionerSwing, wordBoxImage, wordBubbleImage;
 		try {
-			guyPicture = ImageIO.read(new File("./resources/hangman_character.png"));
-			standPicture = ImageIO.read(new File("./resources/hangman_stand0.png"));
+			background = ImageIO.read(new File("./resources/scene.png"));
+			guyPicture = ImageIO.read(new File("./resources/stickman_0.png"));
+			wordBubbleImage = ImageIO.read(new File("./resources/wordBubble.png"));
+			executionerIdle = ImageIO.read(new File("./resources/executioner_idle.png"));
+			executionerSwing = ImageIO.read(new File("./resources/executioner_slash.png"));
+			wordBoxImage = ImageIO.read(new File("./resources/wordBox.png"));
+			
+			
+			ImageIcon bg = new ImageIcon(background);
 			ImageIcon guy = new ImageIcon(guyPicture);
-			ImageIcon stand = new ImageIcon(standPicture);
+			ImageIcon exeIdle = new ImageIcon(executionerIdle);
+			ImageIcon exeSwing = new ImageIcon(executionerSwing);
+			ImageIcon wordBoxIcon = new ImageIcon(wordBoxImage);
+			ImageIcon wordBubbleIcon = new ImageIcon(wordBubbleImage);
+			
+			bgLabel = new JLabel(bg);
 			guyLabel = new JLabel(guy);
-			standLabel = new JLabel(stand);
-			guyLabel.setBounds(WIDTH / 2 - 75, HEIGHT / 2 - 250, 150, 500);
-			standLabel.setBounds(WIDTH / 2 - 35, HEIGHT / 2 - 305, 300, 600);
+			exeIdleLabel = new JLabel(exeIdle);
+			exeSwingLabel = new JLabel(exeSwing);
+			wordBoxLabel = new JLabel(wordBoxIcon);
+			wordBubbleLabel = new JLabel(wordBubbleIcon);
+			
+			bgLabel.setBounds(0,0, WIDTH, HEIGHT);
+			guyLabel.setBounds(WIDTH / 2 - 360, HEIGHT / 2 - 125, 300, 300);
+			exeIdleLabel.setBounds(WIDTH / 2 - 250, HEIGHT / 2 - 275, 500, 500);
+			exeSwingLabel.setBounds(WIDTH / 2 - 100, HEIGHT / 2 - 285, 500, 500);
+			wordBoxLabel.setBounds(WIDTH / 2 + 100 , HEIGHT / 2 - 215, 400, 375);
+			wordBubbleLabel.setBounds(WIDTH / 2 - 410 , HEIGHT / 2 - 325, 600, 300);
+
+			gamePanel.add(usedLetters);
+			gamePanel.add(wordProgress);
+			gamePanel.add(wordBubbleLabel);
+			gamePanel.add(exeIdleLabel);
+			gamePanel.add(wordBoxLabel);
 			gamePanel.add(guyLabel);
-			//gamePanel.add(standLabel);
+			gamePanel.add(bgLabel);
+			
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -295,12 +325,11 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    
 	    
 	    
-	    gamePanel.add(usedLetters);
-		gamePanel.add(wordProgress);
+	    
 		gamePanel.add(tfield);
 	    cont.add(gamePanel);
 	    
-	    lives = 4;
+	    lives = 6;
 	    
 	}
 	
@@ -319,20 +348,58 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		{
 			usedLetters.setText(usedLetters.getText() + " " + c);
 			lives--;
-		    BufferedImage standPicture;
+		    BufferedImage guyPicture;
 		    
-		    int currStand = 3 - lives;
-		    if (currStand == 0)
+		    int currGuy = 6 - lives;
+		    if (currGuy == 0)
 		    {
-			    gamePanel.remove(standLabel);
+			    gamePanel.remove(guyLabel);
+			    gamePanel.remove(wordBubbleLabel);
+			    gamePanel.remove(wordProgress);
 		    }
 			try {
-				standPicture = ImageIO.read(new File("./resources/hangman_stand" + currStand + ".png"));
-				standLabel = new JLabel(new ImageIcon(standPicture));
-				standLabel.setBounds(WIDTH / 2 - 35, HEIGHT / 2 - 305, 300, 600);
-				gamePanel.add(standLabel);
+				guyPicture = ImageIO.read(new File("./resources/stickman_" + currGuy + ".png"));
+				guyLabel = new JLabel(new ImageIcon(guyPicture));
+				guyLabel.setBounds(WIDTH / 2 - 360, HEIGHT / 2 - 125, 300, 300);
+				gamePanel.add(guyLabel, 0);
+				gamePanel.add(wordBubbleLabel, 0);
+				gamePanel.add(wordProgress, 0);
 				gamePanel.revalidate();
 				gamePanel.repaint();
+				new Thread(new Runnable() {
+				     @Override
+				     public void run() {
+				          JLabel currLabel = exeIdleLabel;
+				          Boolean h = true;
+				          for (int i = 1; i < 3; i++)
+				          {
+				        	  try {
+								gamePanel.remove(currLabel);
+								gamePanel.revalidate();
+								gamePanel.repaint();
+								if (h)
+								{
+									h = !h;
+									currLabel = exeSwingLabel;
+								} else
+								{
+									h = !h;
+									currLabel = exeIdleLabel;
+								}
+								gamePanel.add(currLabel, 0);
+								gamePanel.revalidate();
+								gamePanel.repaint();
+								Thread.sleep(500);
+								
+								
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+				          }
+				     }
+				}).start();
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
