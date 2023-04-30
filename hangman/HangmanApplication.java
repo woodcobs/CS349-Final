@@ -461,34 +461,37 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    informationPanel.setLayout(null);
 	    informationPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
 	    informationPanel.setBackground(Color.RED);
-		
-	    title = new JLabel("Hangman!");
-	    title.setBounds(0, 25, WIDTH, 100);
-	    title.setHorizontalAlignment(SwingConstants.CENTER);
-	    title.setFont(new Font("Serif", Font.PLAIN, 50));
-	    titlePanel.add(title);
 	    
 	    easyButton = new JButton(EASY);
-	    easyButton.setBounds(WIDTH/2 - 100, 200, 200, 50);
+	    easyButton.setBounds(WIDTH/2 - 100, 300, 200, 50);
 	    easyButton.setFont(new Font("Serif", Font.PLAIN, 20));
 	    easyButton.addActionListener(this);
 	    titlePanel.add(easyButton);
 	    
 	    mediumButton = new JButton(MEDIUM);
-	    mediumButton.setBounds(WIDTH/2 - 100, 300, 200, 50);
+	    mediumButton.setBounds(WIDTH/2 - 100, 400, 200, 50);
 	    mediumButton.setFont(new Font("Serif", Font.PLAIN, 20));
 	    mediumButton.addActionListener(this);
 	    titlePanel.add(mediumButton);
 	    
 	    hardButton = new JButton(HARD);
-	    hardButton.setBounds(WIDTH/2 - 100, 400, 200, 50);
+	    hardButton.setBounds(WIDTH/2 - 100, 500, 200, 50);
 	    hardButton.setFont(new Font("Serif", Font.PLAIN, 20));
 	    hardButton.addActionListener(this);
 	    titlePanel.add(hardButton);
 	    
+	    BufferedImage logoImage;
+		try {
+			logoImage = ImageIO.read(new File("./resources/HangmanLogo.png"));
+			ImageIcon logoIcon = new ImageIcon(logoImage);
+			JLabel logoLabel = new JLabel(logoIcon);
+			logoLabel.setBounds(0,0, WIDTH, HEIGHT);
+			titlePanel.add(logoLabel, -1);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    
-	    //JComponent hangmanComponent = getGUIComponent();
-	    //hangmanComponent.setBounds(0, 0, WIDTH, HEIGHT);
 	    BufferedImage background;
 		try {
 			background = ImageIO.read(new File("./resources/sceneBlur.png"));
