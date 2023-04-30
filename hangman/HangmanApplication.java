@@ -215,7 +215,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	        	gamePanel.remove(wordBubbleLabel);
 			    gamePanel.remove(wordProgress);
 	    	    BufferedImage guyPicture;
-
+	    	    // image
 				try {
 					guyPicture = ImageIO.read(new File("./resources/stickman_6.png"));
 					guyLabel = new JLabel(new ImageIcon(guyPicture));
