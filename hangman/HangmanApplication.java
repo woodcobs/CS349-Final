@@ -20,6 +20,7 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -43,8 +44,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	protected static final String EASY = "Easy";
 	protected static final String MEDIUM = "Medium";
 	protected static final String HARD = "Hard";
-	  
-	
+	protected static final String CUSTOM = "Custom";
 	
 	
 	protected JTextField letterField;
@@ -56,7 +56,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	private JPanel titlePanel, gamePanel, informationPanel;
 	private JFrame display;
 	private JLabel title, wordProgress, usedLetters;
-	private JButton easyButton, mediumButton, hardButton;
+	private JButton easyButton, mediumButton, hardButton, customButton;
 	private ResourceFinder jarFinder;
 	private String word;
 	private String gameWord;
@@ -93,6 +93,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    if (ac.equalsIgnoreCase(EASY)) handleGame("easy");
 	    else if (ac.equalsIgnoreCase(MEDIUM)) handleGame("medium");
 	    else if (ac.equalsIgnoreCase(HARD)) handleGame("hard");
+	    else if (ac.equalsIgnoreCase(CUSTOM)) handleGame("custom");
 	}
 	
 	/**
@@ -100,27 +101,45 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	*/
 	protected void handleGame(final String difficulty)
 	{
-		currDifficulty = difficulty;
-		String filename = difficulty + ".txt";
-		InputStream is = jarFinder.findInputStream(filename);
-		BufferedReader in = new BufferedReader(new InputStreamReader(is));
-		
-		
-		
-		// Read the words of the difficulty
-		words = new ArrayList<String>();
-		String currWord = "";
-		try
-		{
-			while ((currWord = in.readLine()) != null)
+		if (difficulty.equals("custom")) {
+			String text = JOptionPane.showInputDialog("Enter a word:");
+			System.out.println(text);
+			word = "";
+			gameWord = "";
+			
+			for (int i = 0; i < text.length(); i++)
 			{
-				words.add(currWord);
+				word += text.charAt(i);
+				gameWord += "_";
+				
+				if (i < word.length())
+				{
+					word += " ";
+					gameWord += " ";
+				}			
 			}
-		} catch (IOException ioe)
-		{
-			words.add("error");
+			
+		} else {
+			currDifficulty = difficulty;
+			String filename = difficulty + ".txt";
+			InputStream is = jarFinder.findInputStream(filename);
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+
+			// Read the words of the difficulty
+			words = new ArrayList<String>();
+			String currWord = "";
+			try
+			{
+				while ((currWord = in.readLine()) != null)
+				{
+					words.add(currWord);
+				}
+			} catch (IOException ioe)
+			{
+				words.add("error");
+			}
+			getWord();
 		}
-		getWord();
 		
 		System.out.println(word);
 		System.out.println(gameWord);
@@ -128,6 +147,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    cont.revalidate();
 	    cont.repaint();
 	    newGame();
+	
 	}
 	
 	public void newGame() {
@@ -161,7 +181,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    
 	    
 	    // Sampled Sound Area
-	    InputStream winSound = jarFinder.findInputStream("mixkit-football-team-applause-509.wav");
+	    InputStream winSound = jarFinder.findInputStream("mixkit-conference-audience-clapping-strongly-476 (mp3cut.net).wav");
 	    InputStream loseSound = jarFinder.findInputStream("mixkit-wood-hard-hit-2182.wav");
 	    InputStream background = jarFinder.findInputStream("Monkeys-Spinning-Monkeys.wav");
 	    BufferedInputStream bis1 = new BufferedInputStream(winSound);
@@ -479,6 +499,12 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    hardButton.setFont(new Font("Serif", Font.PLAIN, 20));
 	    hardButton.addActionListener(this);
 	    titlePanel.add(hardButton);
+	    
+	    customButton = new JButton(CUSTOM);
+	    customButton.setBounds(WIDTH/2 - 100, 600, 200, 50);
+	    customButton.setFont(new Font("Serif", Font.PLAIN, 20));
+	    customButton.addActionListener(this);
+	    titlePanel.add(customButton);
 	    
 	    BufferedImage logoImage;
 		try {
