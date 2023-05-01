@@ -26,6 +26,11 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import app.JApplication;
 import io.ResourceFinder;
 import resources.Marker;
+import visual.ScaledVisualizationRenderer;
+import visual.VisualizationView;
+import visual.dynamic.sampled.Screen;
+import visual.statik.SimpleContent;
+import visual.statik.sampled.ContentFactory;
 
 /**
  * @author Bradley Woodcock, Thomas Mandel, Hunter Bowles
@@ -53,10 +58,10 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	private int lives = 6;
 
 	private Container cont;
-    private JLabel bgLabel, guyLabel, exeIdleLabel, exeSwingLabel,  wordBoxLabel, wordBubbleLabel;
+    private JLabel bgLabel, guyLabel, sunLabel, exeIdleLabel, exeSwingLabel,  wordBoxLabel, wordBubbleLabel;
 	private JPanel titlePanel, gamePanel, informationPanel;
 	private JFrame display;
-	private JLabel title, wordProgress, usedLetters, crowd1Label, crowd2Label;
+	private JLabel title, wordProgress, usedLetters, crowd1Label, crowd2Label, logoLabel;
 	private JButton easyButton, mediumButton, hardButton, customButton;
 	private ResourceFinder jarFinder;
 	private String word;
@@ -235,15 +240,26 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	        	gamePanel.remove(guyLabel);
 	        	gamePanel.remove(wordBubbleLabel);
 			    gamePanel.remove(wordProgress);
-	    	    BufferedImage guyPicture;
+			    gamePanel.remove(usedLetters);
+			    gamePanel.remove(wordBoxLabel);
+			    gamePanel.remove(sunLabel);
+	    	    BufferedImage guyPicture, sunPicture;
 
 				try {
 					guyPicture = ImageIO.read(new File("./resources/stickman_6.png"));
+					sunPicture = ImageIO.read(new File("./resources/sun6.png"));
+
 					guyLabel = new JLabel(new ImageIcon(guyPicture));
 					guyLabel.setBounds(WIDTH / 2 - 360, HEIGHT / 2 - 125, 300, 300);
+					sunLabel = new JLabel(new ImageIcon(sunPicture));
+					sunLabel.setBounds(0, 0, WIDTH, HEIGHT);
+					
 					gamePanel.add(guyLabel, 0);
 					gamePanel.add(wordBubbleLabel, 0);
 					gamePanel.add(wordProgress, 0);
+					gamePanel.add(sunLabel, 0);
+					gamePanel.add(wordBoxLabel, 0);
+					gamePanel.add(usedLetters, 0);
 					gamePanel.revalidate();
 					gamePanel.repaint();
 				} catch (IOException e) {
@@ -321,10 +337,12 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	      }
 	    });
 	    
-	    BufferedImage background1, guyPicture, executionerIdle, executionerSwing, wordBoxImage, wordBubbleImage;
+	    BufferedImage background1, guyPicture, sunPicture, executionerIdle, executionerSwing, wordBoxImage, wordBubbleImage;
 		try {
 			background1 = ImageIO.read(new File("./resources/scene.png"));
 			guyPicture = ImageIO.read(new File("./resources/stickman_0.png"));
+			sunPicture = ImageIO.read(new File("./resources/sun0.png"));
+
 			wordBubbleImage = ImageIO.read(new File("./resources/wordBubble.png"));
 			executionerIdle = ImageIO.read(new File("./resources/executioner_idle.png"));
 			executionerSwing = ImageIO.read(new File("./resources/executioner_slash.png"));
@@ -335,6 +353,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			
 			ImageIcon bg = new ImageIcon(background1);
 			ImageIcon guy = new ImageIcon(guyPicture);
+			ImageIcon sunIcon = new ImageIcon(sunPicture);
 			ImageIcon exeIdle = new ImageIcon(executionerIdle);
 			ImageIcon exeSwing = new ImageIcon(executionerSwing);
 			ImageIcon wordBoxIcon = new ImageIcon(wordBoxImage);
@@ -350,6 +369,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			wordBubbleLabel = new JLabel(wordBubbleIcon);
 			crowd1Label = new JLabel(crowd1Icon);
 			crowd2Label = new JLabel(crowd2Icon);
+			sunLabel = new JLabel(sunIcon);
 			
 			bgLabel.setBounds(0,0, WIDTH, HEIGHT);
 			guyLabel.setBounds(WIDTH / 2 - 360, HEIGHT / 2 - 125, 300, 300);
@@ -359,12 +379,14 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			wordBubbleLabel.setBounds(WIDTH / 2 - 410 , HEIGHT / 2 - 325, 600, 300);
 			crowd1Label.setBounds(0,0, WIDTH, HEIGHT);
 			crowd2Label.setBounds(0,0, WIDTH, HEIGHT);
+			sunLabel.setBounds(0,0, WIDTH, HEIGHT);
 
 			gamePanel.add(usedLetters);
 			gamePanel.add(wordProgress);
 			gamePanel.add(wordBubbleLabel);
 			gamePanel.add(exeIdleLabel);
 			gamePanel.add(wordBoxLabel);
+			gamePanel.add(sunLabel);
 			gamePanel.add(guyLabel);
 			gamePanel.add(crowd1Label);
 			gamePanel.add(bgLabel);
@@ -439,7 +461,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			
 			usedLetters.setText(usedLetters.getText() + " " + c);
 			lives--;
-		    BufferedImage guyPicture;
+		    BufferedImage guyPicture, sunImage;
 		    
 		    int currGuy = 6 - lives;
 		    if (currGuy == 0)
@@ -447,14 +469,25 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			    gamePanel.remove(guyLabel);
 			    gamePanel.remove(wordBubbleLabel);
 			    gamePanel.remove(wordProgress);
+			    gamePanel.remove(usedLetters);
+			    gamePanel.remove(wordBoxLabel);
+			    gamePanel.remove(sunLabel);
 		    }
 			try {
 				guyPicture = ImageIO.read(new File("./resources/stickman_" + currGuy + ".png"));
+				sunImage = ImageIO.read(new File("./resources/sun" + currGuy + ".png"));
+				
 				guyLabel = new JLabel(new ImageIcon(guyPicture));
 				guyLabel.setBounds(WIDTH / 2 - 360, HEIGHT / 2 - 125, 300, 300);
+				sunLabel = new JLabel(new ImageIcon(sunImage));
+				sunLabel.setBounds(0, 0, WIDTH, HEIGHT);
+				
 				gamePanel.add(guyLabel, 0);
 				gamePanel.add(wordBubbleLabel, 0);
 				gamePanel.add(wordProgress, 0);
+				gamePanel.add(sunLabel, 0);
+				gamePanel.add(wordBoxLabel, 0);
+				gamePanel.add(usedLetters, 0);
 				gamePanel.revalidate();
 				gamePanel.repaint();
 				new Thread(new Runnable() {
@@ -552,29 +585,46 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    customButton.addActionListener(this);
 	    titlePanel.add(customButton);
 	    
-	    BufferedImage logoImage;
-		try {
-			logoImage = ImageIO.read(new File("./resources/HangmanLogo.png"));
-			ImageIcon logoIcon = new ImageIcon(logoImage);
-			JLabel logoLabel = new JLabel(logoIcon);
-			logoLabel.setBounds(0,0, WIDTH, HEIGHT);
-			titlePanel.add(logoLabel, -1);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	   
 	    
-	    BufferedImage background;
+	    
+		
+		Screen screen1 = new Screen(6);
+		screen1.setRepeating(true);
+		VisualizationView view1 = screen1.getView();
+		view1.setRenderer(new ScaledVisualizationRenderer(view1.getRenderer(),
+		    WIDTH, HEIGHT));
+		view1.setBounds(0, 0, WIDTH, HEIGHT);
+		view1.setSize(WIDTH,HEIGHT);		
+		
+		ResourceFinder rf = ResourceFinder.createInstance(new Marker());
+		String[] frames = rf.loadResourceNames("logo.txt");
+		ContentFactory factory = new ContentFactory(rf);
+		SimpleContent[] frames1 = factory.createContents(frames, 4);
+		for (int i = 0; i<frames1.length; i++)
+		{
+			screen1.add(frames1[i]);
+		}
+		for (int i = frames1.length-1; i>=0; i--)
+		{
+			screen1.add(frames1[i]);
+		}
+		
+		BufferedImage background;
 		try {
 			background = ImageIO.read(new File("./resources/sceneBlur.png"));
 			ImageIcon bg = new ImageIcon(background);
 			bgLabel = new JLabel(bg);
 			bgLabel.setBounds(0,0, WIDTH, HEIGHT);
-			titlePanel.add(bgLabel, -1);
+			//titlePanel.add(bgLabel, -1);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		
+		titlePanel.add(screen1.getView(), -1);
+		screen1.start();
 	    cont.add(titlePanel);
 	}
 
@@ -590,7 +640,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	public void getWord()
 	{
 		Random rand = new Random();
-		int rand_int = rand.nextInt(60);
+		int rand_int = rand.nextInt(words.size() - 1);
 		word = words.get(rand_int);
 		String tempWord = "";
 		// Add spaces
