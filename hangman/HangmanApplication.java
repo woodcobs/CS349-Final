@@ -107,6 +107,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
             System.out.println(text);
             word = "";
             gameWord = "";
+            currDifficulty = difficulty;
 
             for (int i = 0; i < text.length(); i++)
             {
@@ -140,6 +141,9 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			}
 			getWord();
 		}
+		
+		System.out.println(word);
+		System.out.println(gameWord);
 		
 		cont.removeAll();
 	    cont.revalidate();
