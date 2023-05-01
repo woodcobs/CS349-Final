@@ -45,7 +45,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	protected static final String MEDIUM = "Medium";
 	protected static final String HARD = "Hard";
 	protected static final String CUSTOM = "Custom";
-	
+	// comment
 	
 	protected JTextField letterField;
 	
