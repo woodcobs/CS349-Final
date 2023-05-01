@@ -189,15 +189,15 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	    // Sampled Sound Area
 	    InputStream winSound = jarFinder.findInputStream("mixkit-football-team-applause-509.wav");
 	    InputStream loseSound = jarFinder.findInputStream("mixkit-wood-hard-hit-2182.wav");
-	    InputStream background = jarFinder.findInputStream("bgMusic.wav");
+	    //InputStream background = jarFinder.findInputStream("bgMusic.wav");
 	    BufferedInputStream bis1 = new BufferedInputStream(winSound);
 	    BufferedInputStream bis2 = new BufferedInputStream(loseSound);
-	    BufferedInputStream bis3 = new BufferedInputStream(background);
+	    //BufferedInputStream bis3 = new BufferedInputStream(background);
 	    
 	    try {
 	    	aisWin = AudioSystem.getAudioInputStream(bis1);
 			aisLose = AudioSystem.getAudioInputStream(bis2);
-			aisBackground = AudioSystem.getAudioInputStream(bis3);
+			//aisBackground = AudioSystem.getAudioInputStream(bis3);
 		} catch (UnsupportedAudioFileException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -212,7 +212,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			backgroundSound = AudioSystem.getClip();
 			correctSound.open(aisWin);
 			incorrectSound.open(aisLose);
-			backgroundSound.open(aisBackground);
+			//backgroundSound.open(aisBackground);
 			
 		} catch (LineUnavailableException e1) {
 			// TODO Auto-generated catch block
@@ -222,8 +222,8 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			e.printStackTrace();
 		}
 	    
-	    backgroundSound.setFramePosition(0);
-	    backgroundSound.start();
+	    //backgroundSound.setFramePosition(0);
+	    //backgroundSound.start();
 	    
 	    // allows for keyboard input
 	    tfield.addKeyListener(new KeyAdapter()
