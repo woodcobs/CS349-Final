@@ -3,7 +3,6 @@
  */
 package hangman;
 
-
 import java.awt.event.*;
 import java.awt.*;
 import java.awt.Container;
@@ -41,24 +40,20 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	private static final Color BACKGROUND_COLOR = new Color(204, 204, 255);
 	private static final Color GAME_COLOR = new Color(155, 155, 250);
 
-	public static final int WIDTH  = 1366;
+	public static final int WIDTH = 1366;
 	public static final int HEIGHT = 768;
 
-	
 	protected static final String EASY = "Easy";
 	protected static final String MEDIUM = "Medium";
 	protected static final String HARD = "Hard";
 	protected static final String CUSTOM = "Custom";
-	  
-	
-	
-	
+
 	protected JTextField letterField;
-	
+
 	private int lives = 6;
 
 	private Container cont;
-    private JLabel bgLabel, guyLabel, sunLabel, exeIdleLabel, exeSwingLabel,  wordBoxLabel, wordBubbleLabel;
+	private JLabel bgLabel, guyLabel, sunLabel, exeIdleLabel, exeSwingLabel, wordBoxLabel, wordBubbleLabel;
 	private JPanel titlePanel, gamePanel, informationPanel;
 	private JFrame display;
 	private JLabel title, wordProgress, usedLetters, crowd1Label, crowd2Label, logoLabel;
@@ -79,52 +74,52 @@ public class HangmanApplication extends JApplication implements ActionListener {
 	 */
 	public HangmanApplication(String[] args) {
 		super(args, WIDTH, HEIGHT);
-	    
-	    jarFinder = ResourceFinder.createInstance(new Marker());
-	    display = new JFrame();
+
+		jarFinder = ResourceFinder.createInstance(new Marker());
+		display = new JFrame();
 	}
 
 	/**
-	 * Handle actionPerformed messages (required by ActionListener).
-	 * In particular, get the input, perform the requested conversion,
-	 * and display the result.
+	 * Handle actionPerformed messages (required by ActionListener). In particular,
+	 * get the input, perform the requested conversion, and display the result.
 	 * 
-	 * @param evt  The ActionEvent that generated the actionPerformed message
+	 * @param evt The ActionEvent that generated the actionPerformed message
 	 */
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		// TODO Auto-generated method stub
 		String ac = evt.getActionCommand();
-	    
-	    if (ac.equalsIgnoreCase(EASY)) handleGame("easy");
-	    else if (ac.equalsIgnoreCase(MEDIUM)) handleGame("medium");
-	    else if (ac.equalsIgnoreCase(HARD)) handleGame("hard");
-	    else if (ac.equalsIgnoreCase(CUSTOM)) handleGame("custom");
+
+		if (ac.equalsIgnoreCase(EASY))
+			handleGame("easy");
+		else if (ac.equalsIgnoreCase(MEDIUM))
+			handleGame("medium");
+		else if (ac.equalsIgnoreCase(HARD))
+			handleGame("hard");
+		else if (ac.equalsIgnoreCase(CUSTOM))
+			handleGame("custom");
 	}
-	
+
 	/**
-	* Handle the ABOUT button.
-	*/
-	protected void handleGame(final String difficulty)
-	{
+	 * Handle the ABOUT button.
+	 */
+	protected void handleGame(final String difficulty) {
 		if (difficulty.equals("custom")) {
-            String text = JOptionPane.showInputDialog("Enter a word:");
-            System.out.println(text);
-            word = "";
-            gameWord = "";
-            currDifficulty = difficulty;
+			String text = JOptionPane.showInputDialog("Enter a word:");
+			System.out.println(text);
+			word = "";
+			gameWord = "";
+			currDifficulty = difficulty;
 
-            for (int i = 0; i < text.length(); i++)
-            {
-                word += text.charAt(i);
-                gameWord += "_";
+			for (int i = 0; i < text.length(); i++) {
+				word += text.charAt(i);
+				gameWord += "_";
 
-                if (i < word.length())
-                {
-                    word += " ";
-                    gameWord += " ";
-                }
-            }
+				if (i < word.length()) {
+					word += " ";
+					gameWord += " ";
+				}
+			}
 		} else {
 			currDifficulty = difficulty;
 			String filename = difficulty + ".txt";
@@ -134,43 +129,39 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			// Read the words of the difficulty
 			words = new ArrayList<String>();
 			String currWord = "";
-			try
-			{
-				while ((currWord = in.readLine()) != null)
-				{
+			try {
+				while ((currWord = in.readLine()) != null) {
 					words.add(currWord);
 				}
-			} catch (IOException ioe)
-			{
+			} catch (IOException ioe) {
 				words.add("error");
 			}
 			getWord();
 		}
-		
+
 		System.out.println(word);
 		System.out.println(gameWord);
-		
+
 		cont.removeAll();
-	    cont.revalidate();
-	    cont.repaint();
-	    newGame();
+		cont.revalidate();
+		cont.repaint();
+		newGame();
 	}
-	
+
 	public void newGame() {
 		gamePanel = new JPanel();
 		gamePanel.setLayout(null);
 		gamePanel.setBorder(BorderFactory.createLineBorder(GAME_COLOR, 2));
 		gamePanel.setBackground(GAME_COLOR);
-		
+
 		usedLetters = new JLabel("");
-		usedLetters.setBounds(WIDTH/2 + 50, HEIGHT/2 - 100, 500, 75);
+		usedLetters.setBounds(WIDTH / 2 + 50, HEIGHT / 2 - 100, 500, 75);
 		usedLetters.setVerticalAlignment(SwingConstants.CENTER);
 		usedLetters.setHorizontalAlignment(SwingConstants.CENTER);
 		usedLetters.setFont(new Font("Serif", Font.PLAIN, 50));
 		usedLetters.setOpaque(false);
 		usedLetters.setBackground(Color.WHITE);
-		
-		
+
 		wordProgress = new JLabel(gameWord);
 		wordProgress.setBounds(0, 35, 1150, 150);
 		wordProgress.setVerticalAlignment(SwingConstants.CENTER);
@@ -178,26 +169,25 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		wordProgress.setFont(new Font("Serif", Font.PLAIN, 40));
 		wordProgress.setOpaque(false);
 		wordProgress.setBackground(Color.LIGHT_GRAY);
-		
-	    JTextField tfield = new JTextField(25);
-	    tfield.setHorizontalAlignment(SwingConstants.RIGHT);
-	    tfield.setBackground(new Color(203, 230, 245));
-	    tfield.setBorder(BorderFactory.createLineBorder(new Color(203, 230, 245), 5));
-	    guessedLetters.clear();
-	    
-	    
-	    // Sampled Sound Area
-	    InputStream winSound = jarFinder.findInputStream("mixkit-football-team-applause-509.wav");
-	    InputStream loseSound = jarFinder.findInputStream("mixkit-wood-hard-hit-2182.wav");
-	    //InputStream background = jarFinder.findInputStream("bgMusic.wav");
-	    BufferedInputStream bis1 = new BufferedInputStream(winSound);
-	    BufferedInputStream bis2 = new BufferedInputStream(loseSound);
-	    //BufferedInputStream bis3 = new BufferedInputStream(background);
-	    
-	    try {
-	    	aisWin = AudioSystem.getAudioInputStream(bis1);
+
+		JTextField tfield = new JTextField(25);
+		tfield.setHorizontalAlignment(SwingConstants.RIGHT);
+		tfield.setBackground(new Color(203, 230, 245));
+		tfield.setBorder(BorderFactory.createLineBorder(new Color(203, 230, 245), 5));
+		guessedLetters.clear();
+
+		// Sampled Sound Area
+		InputStream winSound = jarFinder.findInputStream("mixkit-football-team-applause-509.wav");
+		InputStream loseSound = jarFinder.findInputStream("mixkit-wood-hard-hit-2182.wav");
+		// InputStream background = jarFinder.findInputStream("bgMusic.wav");
+		BufferedInputStream bis1 = new BufferedInputStream(winSound);
+		BufferedInputStream bis2 = new BufferedInputStream(loseSound);
+		// BufferedInputStream bis3 = new BufferedInputStream(background);
+
+		try {
+			aisWin = AudioSystem.getAudioInputStream(bis1);
 			aisLose = AudioSystem.getAudioInputStream(bis2);
-			//aisBackground = AudioSystem.getAudioInputStream(bis3);
+			// aisBackground = AudioSystem.getAudioInputStream(bis3);
 		} catch (UnsupportedAudioFileException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -205,15 +195,15 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-	    
-	    try {
+
+		try {
 			correctSound = AudioSystem.getClip();
 			incorrectSound = AudioSystem.getClip();
 			backgroundSound = AudioSystem.getClip();
 			correctSound.open(aisWin);
 			incorrectSound.open(aisLose);
-			//backgroundSound.open(aisBackground);
-			
+			// backgroundSound.open(aisBackground);
+
 		} catch (LineUnavailableException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -221,123 +211,109 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    
-	    //backgroundSound.setFramePosition(0);
-	    //backgroundSound.start();
-	    
-	    // allows for keyboard input
-	    tfield.addKeyListener(new KeyAdapter()
-	    {
-	      public void keyTyped(KeyEvent keyevent)
-	      {
-	        char c = keyevent.getKeyChar();
 
-	        if (lives == 1)
-	        {
-	        	System.out.println("out of lives");
-	        	tfield.removeKeyListener(this);
+		// backgroundSound.setFramePosition(0);
+		// backgroundSound.start();
 
-	        	gamePanel.remove(guyLabel);
-	        	gamePanel.remove(wordBubbleLabel);
-			    gamePanel.remove(wordProgress);
-			    gamePanel.remove(usedLetters);
-			    gamePanel.remove(wordBoxLabel);
-			    gamePanel.remove(sunLabel);
-	    	    BufferedImage guyPicture, sunPicture;
+		// allows for keyboard input
+		tfield.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent keyevent) {
+				char c = keyevent.getKeyChar();
 
-				try {
-					guyPicture = ImageIO.read(new File("./resources/stickman_6.png"));
-					sunPicture = ImageIO.read(new File("./resources/sun6.png"));
+				if (lives == 1) {
+					System.out.println("out of lives");
+					tfield.removeKeyListener(this);
 
-					guyLabel = new JLabel(new ImageIcon(guyPicture));
-					guyLabel.setBounds(WIDTH / 2 - 360, HEIGHT / 2 - 125, 300, 300);
-					sunLabel = new JLabel(new ImageIcon(sunPicture));
-					sunLabel.setBounds(0, 0, WIDTH, HEIGHT);
-					
-					gamePanel.add(guyLabel, 0);
-					gamePanel.add(wordBubbleLabel, 0);
-					gamePanel.add(wordProgress, 0);
-					gamePanel.add(sunLabel, 0);
-					gamePanel.add(wordBoxLabel, 0);
-					gamePanel.add(usedLetters, 0);
-					gamePanel.revalidate();
-					gamePanel.repaint();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					gamePanel.remove(guyLabel);
+					gamePanel.remove(wordBubbleLabel);
+					gamePanel.remove(wordProgress);
+					gamePanel.remove(usedLetters);
+					gamePanel.remove(wordBoxLabel);
+					gamePanel.remove(sunLabel);
+					BufferedImage guyPicture, sunPicture;
+
+					try {
+						guyPicture = ImageIO.read(new File("./resources/stickman_6.png"));
+						sunPicture = ImageIO.read(new File("./resources/sun6.png"));
+
+						guyLabel = new JLabel(new ImageIcon(guyPicture));
+						guyLabel.setBounds(WIDTH / 2 - 360, HEIGHT / 2 - 125, 300, 300);
+						sunLabel = new JLabel(new ImageIcon(sunPicture));
+						sunLabel.setBounds(0, 0, WIDTH, HEIGHT);
+
+						gamePanel.add(guyLabel, 0);
+						gamePanel.add(wordBubbleLabel, 0);
+						gamePanel.add(wordProgress, 0);
+						gamePanel.add(sunLabel, 0);
+						gamePanel.add(wordBoxLabel, 0);
+						gamePanel.add(usedLetters, 0);
+						gamePanel.revalidate();
+						gamePanel.repaint();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					Object[] options = { "Menu", "Play Again" };
+
+					int n = JOptionPane.showOptionDialog(cont, "The word was: " + word.replace(" ", ""), "Game Over!",
+							JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, null);
+
+					if (n == 1) {
+						// Play Again
+						backgroundSound.stop();
+						handleGame(currDifficulty);
+					} else {
+						// Back to Menu
+						cont.removeAll();
+						cont.revalidate();
+						cont.repaint();
+						backgroundSound.stop();
+						mainMenu();
+					}
+
+					return;
 				}
-	        	
-	        	Object[] options = {"Menu", "Play Again"};
 
-	        	
-	        	int n = JOptionPane.showOptionDialog(cont, "The word was: " + word.replace(" ", ""), "Game Over!",
-	        			JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
-	        			null, options, null);
-	        	
-	        	if (n == 1) 
-	        	{
-	        		// Play Again
-	        		backgroundSound.stop();
-	        	    handleGame(currDifficulty);
-	        	} else
-	        	{
-	        		// Back to Menu
-	        		cont.removeAll();
-	        	    cont.revalidate();
-	        	    cont.repaint();
-	        	    backgroundSound.stop();
-	        		mainMenu();
-	        	}
-	        	
-	        	return;
-	        }
-	        
-	        if (c >= 'a' && c <= 'z' && !guessedLetters.contains(c))
-	        {
-	        	System.out.println(c + " Typed!");
-	        	checkLetter(c);
-	        	guessedLetters.add(c);
-	        	
-	        	System.out.println(word);
-	        	if (word.equals(gameWord))
-	        	{
-	        		System.out.println("YOU WIN");
-		        	tfield.removeKeyListener(this);
-		        	
-		        	Object[] options = {"Menu", "Play Again"};
+				if (c >= 'a' && c <= 'z' && !guessedLetters.contains(c)) {
+					System.out.println(c + " Typed!");
+					checkLetter(c);
+					guessedLetters.add(c);
 
-		        	
-		        	int n = JOptionPane.showOptionDialog(cont, "NICE WORK", "YOU WIN!",
-		        			JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
-		        			null, options, null);
-		        	
-		        	if (n == 1) 
-		        	{
-		        		// Play Again
-		        		backgroundSound.stop();
-		        	    handleGame(currDifficulty);
-		        	} else
-		        	{
-		        		// Back to Menu
-		        		backgroundSound.stop();
-		        		cont.removeAll();
-		        	    cont.revalidate();
-		        	    cont.repaint();
-		        		mainMenu();
-		        	}
-		        	
-		        	return;
-	        	}
-	        	System.out.println("Lives Remaining: " + lives);
-	        }
-	        else
-	        {
-	          keyevent.consume();
-	        }
-	      }
-	    });
-	    
-	    BufferedImage background1, guyPicture, sunPicture, executionerIdle, executionerSwing, wordBoxImage, wordBubbleImage;
+					System.out.println(word);
+					if (word.equals(gameWord)) {
+						System.out.println("YOU WIN");
+						tfield.removeKeyListener(this);
+
+						Object[] options = { "Menu", "Play Again" };
+
+						int n = JOptionPane.showOptionDialog(cont, "NICE WORK", "YOU WIN!", JOptionPane.DEFAULT_OPTION,
+								JOptionPane.INFORMATION_MESSAGE, null, options, null);
+
+						if (n == 1) {
+							// Play Again
+							backgroundSound.stop();
+							handleGame(currDifficulty);
+						} else {
+							// Back to Menu
+							backgroundSound.stop();
+							cont.removeAll();
+							cont.revalidate();
+							cont.repaint();
+							mainMenu();
+						}
+
+						return;
+					}
+					System.out.println("Lives Remaining: " + lives);
+				} else {
+					keyevent.consume();
+				}
+			}
+		});
+
+		BufferedImage background1, guyPicture, sunPicture, executionerIdle, executionerSwing, wordBoxImage,
+				wordBubbleImage;
 		try {
 			background1 = ImageIO.read(new File("./resources/scene.png"));
 			guyPicture = ImageIO.read(new File("./resources/stickman_0.png"));
@@ -349,8 +325,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			wordBoxImage = ImageIO.read(new File("./resources/wordBox.png"));
 			BufferedImage crowd1Image = ImageIO.read(new File("./resources/crows1.png"));
 			BufferedImage crowd2Image = ImageIO.read(new File("./resources/crowd2.png"));
-			
-			
+
 			ImageIcon bg = new ImageIcon(background1);
 			ImageIcon guy = new ImageIcon(guyPicture);
 			ImageIcon sunIcon = new ImageIcon(sunPicture);
@@ -360,7 +335,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			ImageIcon wordBubbleIcon = new ImageIcon(wordBubbleImage);
 			ImageIcon crowd1Icon = new ImageIcon(crowd1Image);
 			ImageIcon crowd2Icon = new ImageIcon(crowd2Image);
-			
+
 			bgLabel = new JLabel(bg);
 			guyLabel = new JLabel(guy);
 			exeIdleLabel = new JLabel(exeIdle);
@@ -370,16 +345,16 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			crowd1Label = new JLabel(crowd1Icon);
 			crowd2Label = new JLabel(crowd2Icon);
 			sunLabel = new JLabel(sunIcon);
-			
-			bgLabel.setBounds(0,0, WIDTH, HEIGHT);
+
+			bgLabel.setBounds(0, 0, WIDTH, HEIGHT);
 			guyLabel.setBounds(WIDTH / 2 - 360, HEIGHT / 2 - 125, 300, 300);
 			exeIdleLabel.setBounds(WIDTH / 2 - 250, HEIGHT / 2 - 275, 500, 500);
 			exeSwingLabel.setBounds(WIDTH / 2 - 100, HEIGHT / 2 - 285, 500, 500);
-			wordBoxLabel.setBounds(WIDTH / 2 + 100 , HEIGHT / 2 - 215, 400, 375);
-			wordBubbleLabel.setBounds(WIDTH / 2 - 410 , HEIGHT / 2 - 325, 600, 300);
-			crowd1Label.setBounds(0,0, WIDTH, HEIGHT);
-			crowd2Label.setBounds(0,0, WIDTH, HEIGHT);
-			sunLabel.setBounds(0,0, WIDTH, HEIGHT);
+			wordBoxLabel.setBounds(WIDTH / 2 + 100, HEIGHT / 2 - 215, 400, 375);
+			wordBubbleLabel.setBounds(WIDTH / 2 - 410, HEIGHT / 2 - 325, 600, 300);
+			crowd1Label.setBounds(0, 0, WIDTH, HEIGHT);
+			crowd2Label.setBounds(0, 0, WIDTH, HEIGHT);
+			sunLabel.setBounds(0, 0, WIDTH, HEIGHT);
 
 			gamePanel.add(usedLetters);
 			gamePanel.add(wordProgress);
@@ -390,26 +365,22 @@ public class HangmanApplication extends JApplication implements ActionListener {
 			gamePanel.add(guyLabel);
 			gamePanel.add(crowd1Label);
 			gamePanel.add(bgLabel);
-			
+
 			new Thread(new Runnable() {
-			     @Override
-				
-			     
-			     public void run() {
-			          JLabel currLabel = crowd1Label;
-			          Boolean h = true;
-			          while(true)
-			          {
-			        	  try {
+				@Override
+
+				public void run() {
+					JLabel currLabel = crowd1Label;
+					Boolean h = true;
+					while (true) {
+						try {
 							gamePanel.remove(currLabel);
 							gamePanel.revalidate();
 							gamePanel.repaint();
-							if (h)
-							{
+							if (h) {
 								h = !h;
 								currLabel = crowd2Label;
-							} else
-							{
+							} else {
 								h = !h;
 								currLabel = crowd1Label;
 							}
@@ -417,71 +388,61 @@ public class HangmanApplication extends JApplication implements ActionListener {
 							gamePanel.revalidate();
 							gamePanel.repaint();
 							Thread.sleep(500);
-							
-							
+
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-			          }
-			     }
+					}
+				}
 			}).start();
-			
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    
-	    
-	    
-	    
+
 		gamePanel.add(tfield);
-	    cont.add(gamePanel);
-	    
-	    lives = 6;
-	    
+		cont.add(gamePanel);
+
+		lives = 6;
+
 	}
-	
-	public void checkLetter(char c)
-	{
+
+	public void checkLetter(char c) {
 		List<Integer> indices = new ArrayList<Integer>();
-		for (int i = 0; i < word.length(); i++)
-		{
-			if (word.charAt(i) == c)
-			{
+		for (int i = 0; i < word.length(); i++) {
+			if (word.charAt(i) == c) {
 				indices.add(i);
 			}
 		}
-		
-		if (indices.isEmpty())
-		{
+
+		if (indices.isEmpty()) {
 			incorrectSound.setFramePosition(0);
 			incorrectSound.start();
-			
+
 			usedLetters.setText(usedLetters.getText() + " " + c);
 			lives--;
-		    BufferedImage guyPicture, sunImage;
-		    
-		    int currGuy = 6 - lives;
-		    if (currGuy == 0)
-		    {
-			    gamePanel.remove(guyLabel);
-			    gamePanel.remove(wordBubbleLabel);
-			    gamePanel.remove(wordProgress);
-			    gamePanel.remove(usedLetters);
-			    gamePanel.remove(wordBoxLabel);
-			    gamePanel.remove(sunLabel);
-		    }
+			BufferedImage guyPicture, sunImage;
+
+			int currGuy = 6 - lives;
+			if (currGuy == 0) {
+				gamePanel.remove(guyLabel);
+				gamePanel.remove(wordBubbleLabel);
+				gamePanel.remove(wordProgress);
+				gamePanel.remove(usedLetters);
+				gamePanel.remove(wordBoxLabel);
+				gamePanel.remove(sunLabel);
+			}
 			try {
 				guyPicture = ImageIO.read(new File("./resources/stickman_" + currGuy + ".png"));
 				sunImage = ImageIO.read(new File("./resources/sun" + currGuy + ".png"));
-				
+
 				guyLabel = new JLabel(new ImageIcon(guyPicture));
 				guyLabel.setBounds(WIDTH / 2 - 360, HEIGHT / 2 - 125, 300, 300);
 				sunLabel = new JLabel(new ImageIcon(sunImage));
 				sunLabel.setBounds(0, 0, WIDTH, HEIGHT);
-				
+
 				gamePanel.add(guyLabel, 0);
 				gamePanel.add(wordBubbleLabel, 0);
 				gamePanel.add(wordProgress, 0);
@@ -491,22 +452,19 @@ public class HangmanApplication extends JApplication implements ActionListener {
 				gamePanel.revalidate();
 				gamePanel.repaint();
 				new Thread(new Runnable() {
-				     @Override
-				     public void run() {
-				          JLabel currLabel = exeIdleLabel;
-				          Boolean h = true;
-				          for (int i = 1; i < 3; i++)
-				          {
-				        	  try {
+					@Override
+					public void run() {
+						JLabel currLabel = exeIdleLabel;
+						Boolean h = true;
+						for (int i = 1; i < 3; i++) {
+							try {
 								gamePanel.remove(currLabel);
 								gamePanel.revalidate();
 								gamePanel.repaint();
-								if (h)
-								{
+								if (h) {
 									h = !h;
 									currLabel = exeSwingLabel;
-								} else
-								{
+								} else {
 									h = !h;
 									currLabel = exeIdleLabel;
 								}
@@ -514,162 +472,139 @@ public class HangmanApplication extends JApplication implements ActionListener {
 								gamePanel.revalidate();
 								gamePanel.repaint();
 								Thread.sleep(500);
-								
-								
+
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-				          }
-				     }
+						}
+					}
 				}).start();
-				
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
-		} else
-		{
+
+		} else {
 			correctSound.setFramePosition(0);
 			correctSound.start();
-			
-			for (int index : indices)
-			{
-				gameWord = gameWord.substring(0, index) + c
-	              + gameWord.substring(index + 1);
+
+			for (int index : indices) {
+				gameWord = gameWord.substring(0, index) + c + gameWord.substring(index + 1);
 				wordProgress.setText(gameWord);
 			}
 		}
 	}
-	
-	
-	public void mainMenu()
-	{
-		
-		
-			
+
+	public void mainMenu() {
+
 		titlePanel = new JPanel();
-	    titlePanel.setLayout(null);
-	    titlePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
-	    titlePanel.setBackground(Color.LIGHT_GRAY);
-	    
-	    
-	    informationPanel = new JPanel();
-	    informationPanel.setLayout(null);
-	    informationPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
-	    informationPanel.setBackground(Color.RED);
-	    
-	    easyButton = new JButton(EASY);
-	    easyButton.setBounds(WIDTH/2 - 100, 300, 200, 50);
-	    easyButton.setFont(new Font("Serif", Font.PLAIN, 20));
-	    easyButton.addActionListener(this);
-	    titlePanel.add(easyButton);
-	    
-	    mediumButton = new JButton(MEDIUM);
-	    mediumButton.setBounds(WIDTH/2 - 100, 400, 200, 50);
-	    mediumButton.setFont(new Font("Serif", Font.PLAIN, 20));
-	    mediumButton.addActionListener(this);
-	    titlePanel.add(mediumButton);
-	    
-	    hardButton = new JButton(HARD);
-	    hardButton.setBounds(WIDTH/2 - 100, 500, 200, 50);
-	    hardButton.setFont(new Font("Serif", Font.PLAIN, 20));
-	    hardButton.addActionListener(this);
-	    titlePanel.add(hardButton);
-	    
-	    customButton = new JButton(CUSTOM);
-	    customButton.setBounds(WIDTH/2 - 100, 600, 200, 50);
-	    customButton.setFont(new Font("Serif", Font.PLAIN, 20));
-	    customButton.addActionListener(this);
-	    titlePanel.add(customButton);
-	    
-	   
-	    
-	    
-		
+		titlePanel.setLayout(null);
+		titlePanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
+		titlePanel.setBackground(Color.LIGHT_GRAY);
+
+		informationPanel = new JPanel();
+		informationPanel.setLayout(null);
+		informationPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
+		informationPanel.setBackground(Color.RED);
+
+		easyButton = new JButton(EASY);
+		easyButton.setBounds(WIDTH / 2 - 100, 300, 200, 50);
+		easyButton.setFont(new Font("Serif", Font.PLAIN, 20));
+		easyButton.addActionListener(this);
+		titlePanel.add(easyButton);
+
+		mediumButton = new JButton(MEDIUM);
+		mediumButton.setBounds(WIDTH / 2 - 100, 400, 200, 50);
+		mediumButton.setFont(new Font("Serif", Font.PLAIN, 20));
+		mediumButton.addActionListener(this);
+		titlePanel.add(mediumButton);
+
+		hardButton = new JButton(HARD);
+		hardButton.setBounds(WIDTH / 2 - 100, 500, 200, 50);
+		hardButton.setFont(new Font("Serif", Font.PLAIN, 20));
+		hardButton.addActionListener(this);
+		titlePanel.add(hardButton);
+
+		customButton = new JButton(CUSTOM);
+		customButton.setBounds(WIDTH / 2 - 100, 600, 200, 50);
+		customButton.setFont(new Font("Serif", Font.PLAIN, 20));
+		customButton.addActionListener(this);
+		titlePanel.add(customButton);
+
 		Screen screen1 = new Screen(6);
 		screen1.setRepeating(true);
 		VisualizationView view1 = screen1.getView();
-		view1.setRenderer(new ScaledVisualizationRenderer(view1.getRenderer(),
-		    WIDTH, HEIGHT));
+		view1.setRenderer(new ScaledVisualizationRenderer(view1.getRenderer(), WIDTH, HEIGHT));
 		view1.setBounds(0, 0, WIDTH, HEIGHT);
-		view1.setSize(WIDTH,HEIGHT);		
-		
+		view1.setSize(WIDTH, HEIGHT);
+
 		ResourceFinder rf = ResourceFinder.createInstance(new Marker());
 		String[] frames = rf.loadResourceNames("logo.txt");
 		ContentFactory factory = new ContentFactory(rf);
 		SimpleContent[] frames1 = factory.createContents(frames, 4);
-		for (int i = 0; i<frames1.length; i++)
-		{
+		for (int i = 0; i < frames1.length; i++) {
 			screen1.add(frames1[i]);
 		}
-		for (int i = frames1.length-1; i>=0; i--)
-		{
+		for (int i = frames1.length - 1; i >= 0; i--) {
 			screen1.add(frames1[i]);
 		}
-		
+
 		BufferedImage background;
 		try {
 			background = ImageIO.read(new File("./resources/sceneBlur.png"));
 			ImageIcon bg = new ImageIcon(background);
 			bgLabel = new JLabel(bg);
-			bgLabel.setBounds(0,0, WIDTH, HEIGHT);
-			//titlePanel.add(bgLabel, -1);
+			bgLabel.setBounds(0, 0, WIDTH, HEIGHT);
+			// titlePanel.add(bgLabel, -1);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		
 		titlePanel.add(screen1.getView(), -1);
 		screen1.start();
-	    cont.add(titlePanel);
+		cont.add(titlePanel);
 	}
 
 	@Override
-	public void init() { 
-		
+	public void init() {
+
 		cont = getContentPane();
-	    cont.setLayout(new BorderLayout(5, 10));
-	    cont.setBackground(BACKGROUND_COLOR);
-	    mainMenu();
+		cont.setLayout(new BorderLayout(5, 10));
+		cont.setBackground(BACKGROUND_COLOR);
+		mainMenu();
 	}
-	
-	public void getWord()
-	{
+
+	public void getWord() {
 		Random rand = new Random();
 		int rand_int = rand.nextInt(words.size() - 1);
 		word = words.get(rand_int);
 		String tempWord = "";
 		// Add spaces
-		
+
 		gameWord = "";
-		for (int i = 0; i < word.length(); i++)
-		{
+		for (int i = 0; i < word.length(); i++) {
 			tempWord += word.charAt(i);
 			gameWord += "_";
-			
-			if (i < word.length())
-			{
+
+			if (i < word.length()) {
 				tempWord += " ";
 				gameWord += " ";
-			}			
+			}
 		}
 		word = tempWord;
 	}
-	
 
-	  /**
-	  * Construct and invoke  (in the event dispatch thread) 
-	  * an instance of this JApplication.
-	  * 
-	  * @param args The command line arguments
-	  */
-	  public static void main(final String[] args) 
-	  {
-	    JApplication app = new HangmanApplication(args);
-	    invokeInEventDispatchThread(app);
-	  }
+	/**
+	 * Construct and invoke (in the event dispatch thread) an instance of this
+	 * JApplication.
+	 * 
+	 * @param args The command line arguments
+	 */
+	public static void main(final String[] args) {
+		JApplication app = new HangmanApplication(args);
+		invokeInEventDispatchThread(app);
+	}
 }
