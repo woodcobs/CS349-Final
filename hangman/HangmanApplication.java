@@ -169,9 +169,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		wordProgress.setFont(new Font("Serif", Font.PLAIN, 40));
 		wordProgress.setOpaque(false);
 		wordProgress.setBackground(Color.LIGHT_GRAY);
-		
-		
-		
+
 		JTextField tfield = new JTextField(25);
 		tfield.setHorizontalAlignment(SwingConstants.RIGHT);
 		tfield.setBackground(new Color(203, 230, 245));
@@ -235,7 +233,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 					BufferedImage guyPicture, sunPicture;
 
 					ImageFactory factory = new ImageFactory(rf);
-					
+
 					guyPicture = factory.createBufferedImage("stickman_6.png", 4);
 					sunPicture = factory.createBufferedImage("sun6.png", 4);
 
@@ -256,8 +254,7 @@ public class HangmanApplication extends JApplication implements ActionListener {
 					Object[] options = { "Menu", "Play Again" };
 
 					String loseText = "You Died!";
-					if (name != null)
-					{
+					if (name != null) {
 						loseText = name + " Has Died!";
 					}
 					int n = JOptionPane.showOptionDialog(cont, "The word was: " + word.replace(" ", ""), loseText,
@@ -290,13 +287,12 @@ public class HangmanApplication extends JApplication implements ActionListener {
 						tfield.removeKeyListener(this);
 
 						Object[] options = { "Menu", "Play Again" };
-						
+
 						String winText = "YOU SURVIVED!";
-						if (name != null)
-						{
+						if (name != null) {
 							winText = name.toUpperCase() + " HAS SURVIVED!";
 						}
-						
+
 						int n = JOptionPane.showOptionDialog(cont, "NICE WORK", winText, JOptionPane.DEFAULT_OPTION,
 								JOptionPane.INFORMATION_MESSAGE, null, options, null);
 
@@ -375,9 +371,8 @@ public class HangmanApplication extends JApplication implements ActionListener {
 		gamePanel.add(guyLabel);
 		gamePanel.add(crowd1Label);
 		gamePanel.add(bgLabel);
-		
-		if (name != null)
-		{
+
+		if (name != null) {
 			System.out.println("Name is " + name);
 			nameLabel = new JLabel(name);
 			nameLabel.setBounds(275, 35, 200, 325);
